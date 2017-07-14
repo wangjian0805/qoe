@@ -1,0 +1,37 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<context:property-placeholder location="classpath*:config-db.properties" ignore-unresolvable="true"/>
+
+	<!-- 
+	<bean id="masterDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	 -->
+	<bean id="masterDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init"  destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}"/>
+		<property name="url" value="${jdbc.url}"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+	</bean>
+	<bean id="masterSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="masterDataSource" />
+	</bean>
+	<bean id="masterTransactionManager"
+		  class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		  p:dataSource-ref="masterDataSource"/>
+	<tx:annotation-driven transaction-manager="masterTransactionManager"/>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.netease.recomm.shortvideo.mapper" />
+		<property name="sqlSessionFactoryBeanName" value="masterSqlSessionFactory"/>
+	</bean>
+
+</beans>
