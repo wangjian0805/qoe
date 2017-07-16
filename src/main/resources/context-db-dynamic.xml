@@ -12,7 +12,7 @@
 
 	<context:property-placeholder location="classpath*:config-db.properties" ignore-unresolvable="true"/>
 
-	<!-- 
+	<!--
 	<bean id="masterDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 	 -->
 	<bean id="masterDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init"  destroy-method="close">
@@ -30,7 +30,7 @@
 	<tx:annotation-driven transaction-manager="masterTransactionManager"/>
 
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.netease.recomm.shortvideo.mapper" />
+		<property name="basePackage" value="cn.bupt.qoe.mapper" />
 		<property name="sqlSessionFactoryBeanName" value="masterSqlSessionFactory"/>
 	</bean>
 
