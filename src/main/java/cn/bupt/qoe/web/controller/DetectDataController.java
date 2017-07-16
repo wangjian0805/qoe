@@ -18,7 +18,7 @@ public class DetectDataController {
     DetectDataMapper mapper;
 
     @RequestMapping("/data")
-    @ResponseBody
+    @ResponseBody//对象变json
     public WebResult getAllDetectData(){
         WebResult result = new WebResult();
         result.setData(mapper.getAllDetectData());
