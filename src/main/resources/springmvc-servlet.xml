@@ -19,5 +19,16 @@
 	<context:annotation-config />
 	<mvc:annotation-driven/>
 
+	<mvc:default-servlet-handler/>
+
+	<mvc:resources mapping="/js/**" location="/WEB-INF/static/js/" />
+	<mvc:resources mapping="/css/**" location="/WEB-INF/static/css/" />
+	<!--配置视图转换器 -->
+	<bean
+			class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/WEB-INF/jsp/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
 
 </beans>
