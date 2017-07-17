@@ -16,9 +16,18 @@ public interface DetectDataMapper {
 	@Select(value = "select * from detect_by_wifi order by detect_time desc")
 	List<DetectData> getAllDetectData();
 
-	@Insert("insert into detect_by_wifi (cpu,memory_consumption,screen_pixels,video_stream_bitRate,"
-			+ "throughput,init_buffer,reserved_buffer,video_length,message_delay,latitude,longitude,) "
-			+ "values (#{cpu},#{memoryConsumption},#{screenPixels},#{videoStreamBitrate},#{throughput},#{initBuffer}"
-			+ ",#{reservedBuffer},#{videoLength},#{messageDelay}，#{latitude}，#{longitude})")
-	void addDetectData(DetectData data);
+	@Insert(value = "insert into detect_by_wifi values (#{resultId,jdbcType=BIGINT}, " +
+			"                                           #{cpu,jdbcType=INTEGER}, " +
+			"                                           #{memoryConsumption,jdbcType=INTEGER}, " +
+			"                                           #{screenPixels,jdbcType=INTEGER}, " +
+			"                                           #{videoStreamBitrate,jdbcType=INTEGER}, " +
+			"                                           #{throughput,jdbcType=INTEGER}, " +
+			"                                           #{initBuffer,jdbcType=INTEGER}, " +
+			"                                           #{reservedBuffer,jdbcType=INTEGER}, " +
+			"                                           #{videoLength,jdbcType=INTEGER}, " +
+			"                                           #{messageDelay,jdbcType=INTEGER}, " +
+			"                                           #{latitude,jdbcType=DOUBLE}, " +
+			"                                           #{longitude,jdbcType=DOUBLE}, " +
+			"                                           #{detectTime,jdbcType=TIMESTAMP})")
+	int insertDetectData(DetectData data);
 }
