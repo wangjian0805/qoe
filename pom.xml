@@ -49,15 +49,11 @@
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<configuration>
-					<port>8080</port>
-					<path>/</path>
-					<!-- 
-					tomcat热部署
-					tomcatusers.xml
-					<url>
-					<username>
-					<password>
-					 -->
+					<url>http://localhost:8080/manager/text</url>
+					<path>/qoe</path>
+					<server>tomcat7</server>
+					<username>root</username>
+					<password>root</password>
 				</configuration>
 			</plugin>
 		</plugins>
