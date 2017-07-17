@@ -3,9 +3,9 @@ var point = new BMap.Point(116.364549,39.968112);
 map.centerAndZoom(point, 18); // 初始化地图，设置中心点坐标和地图级别
 map.enableScrollWheelZoom(); // 允许滚轮缩放
 
-setTimeout(function(){
-    showData();
-}, 1000);
+
+showData();
+
 
 function showData(){
 	var myIcon1 =new BMap.Icon("http://10.103.93.3:8080/WiBUPTInfo/transparent.png", new BMap.Size(90, 90), {imageOffset: new BMap.Size(0, 0)});
@@ -13,7 +13,7 @@ function showData(){
 	var points  = [];
 	console.log("1.发送ajax请求")
 	$.ajax({
-		url:"http://localhost:8080/qoe/api/detect/data",
+		url:"http://localhost:58080/qoe/api/detect/data",
 		dataType:"json",
 		type:"GET",
 		success:function(response){
@@ -35,8 +35,7 @@ function showData(){
 			marker.setShadow(myShadowIcon);
 			map.addOverlay(marker);              
 			showInfo(point.count,marker);
-			}
-			
+		}	
 			console.log("points数组，共"+points.length+"个数据")
 			console.log("3.heatmap声明 ");
 			heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":50,
