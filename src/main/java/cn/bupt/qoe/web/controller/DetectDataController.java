@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -28,4 +30,22 @@ public class DetectDataController {
         result.setData(mapper.getAllDetectData());
         return result;
     }
+
+    //安卓测量数据持久化
+    @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    @ResponseBody
+    public WebResult insertDetectData(@RequestBody DetectData detectData) {
+
+        WebResult result = new WebResult();
+        int insertReturn = mapper.insertDetectData(detectData);
+        if (insertReturn == 1) {
+            result.setMessage("插入成功");
+            result.setData(1);
+        } else {
+            result.setCode(-1);
+            result.setMessage("插入失败");
+        }
+        return result;
+    }
+
 }
