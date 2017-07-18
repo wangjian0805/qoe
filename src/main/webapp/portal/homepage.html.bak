@@ -325,6 +325,5 @@
       
     </div>
   </body>
-  <script src="resources/scripts/loadHomepage.js"></script>
 </html>
-
+<script src="resources/scripts/loadHomepage.js"></script>
