@@ -3,6 +3,7 @@ package cn.bupt.qoe.mapper;
 import cn.bupt.qoe.model.DetectData;
 import cn.bupt.qoe.rest.WebResult;
 
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 
@@ -15,6 +16,8 @@ public interface DetectDataMapper {
 
 	@Select(value = "select * from detect_by_wifi order by detect_time desc")
 	List<DetectData> getAllDetectData();
+
+	List<DetectData> selectAllByPage(PageBounds pageBounds);
 
 	@Insert(value = "insert into detect_by_wifi values (#{resultId,jdbcType=BIGINT}, " +
 			"                                           #{cpu,jdbcType=INTEGER}, " +

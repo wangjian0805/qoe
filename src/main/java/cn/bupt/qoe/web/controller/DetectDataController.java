@@ -6,12 +6,14 @@ import cn.bupt.qoe.rest.WebResult;
 
 import javax.servlet.http.HttpServletRequest;
 
+import cn.bupt.qoe.service.DetectResultService;
+import cn.bupt.qoe.service.impl.DetectResultServiceImpl;
+import cn.bupt.qoe.util.PaginatorResult;
+import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by Ambitous on 2017/7/16.
@@ -19,6 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/api/detect")
 public class DetectDataController {
+
+    @Autowired
+    DetectResultService detectResultService;
 
     @Autowired
     DetectDataMapper mapper;
@@ -47,5 +52,24 @@ public class DetectDataController {
         }
         return result;
     }
+
+    @RequestMapping("/detail")
+    public @ResponseBody PaginatorResult<DetectData> listPage(
+            @RequestParam(required = false, value = "pageSize", defaultValue = "1") int curPageSize,
+            @RequestParam(required = false, value = "pageNumber", defaultValue = "5") int limit){
+        PaginatorResult<DetectData> result = new PaginatorResult<DetectData>();
+        PageList<DetectData> detectResultPageList = detectResultService.selectAllDetectResultByPage(curPageSize,limit);
+        if (!CollectionUtils.isEmpty(detectResultPageList)) {
+            result.setRows(detectResultPageList);
+            result.setTotal(detectResultPageList.getPaginator().getTotalCount());
+        }
+        return result;
+    }
+
+    @RequestMapping("/test")
+    public String forward(){
+        return "test";
+    }
+    //@RequestMapping(value = "/highcharts", method = RequestMethod.POST)
 
 }
