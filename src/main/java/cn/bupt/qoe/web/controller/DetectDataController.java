@@ -1,13 +1,12 @@
 package cn.bupt.qoe.web.controller;
 
+import com.algorithm.QoE;
 import cn.bupt.qoe.mapper.DetectDataMapper;
 import cn.bupt.qoe.model.DetectData;
 import cn.bupt.qoe.rest.WebResult;
 
-import javax.servlet.http.HttpServletRequest;
 
 import cn.bupt.qoe.service.DetectResultService;
-import cn.bupt.qoe.service.impl.DetectResultServiceImpl;
 import cn.bupt.qoe.util.PaginatorResult;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +42,21 @@ public class DetectDataController {
 
         WebResult result = new WebResult();
         int insertReturn = mapper.insertDetectData(detectData);
+        Long id = mapper.getLastInsertId();
+        QoE qoe = new QoE(
+                detectData.getCpu(),
+                detectData.getMemoryConsumption(),
+                detectData.getScreenPixels(),
+                detectData.getVideoStreamBitrate(),
+                detectData.getThroughput(),
+                detectData.getInitBuffer(),
+                detectData.getVideoLength(),
+                detectData.getMessageDelay()
+        );
+        double mos = qoe.getMOS();
+        System.out.println("id为："+id);
+        System.out.println("mos为："+mos);
+        int insertMosResutn = mapper.insertMos(id, mos);
         if (insertReturn == 1) {
             result.setMessage("插入成功");
             result.setData(1);
