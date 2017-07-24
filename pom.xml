@@ -49,12 +49,30 @@
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<configuration>
-					<url>http://localhost:8080/manager/text</url>
+					<url>http://10.103.93.3:8080/manager/text</url>
 					<path>/qoe</path>
 					<server>tomcat7</server>
 					<username>root</username>
 					<password>root</password>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<webResources>
+						<resource>
+							<directory>${project.basedir}/lib</directory>
+							<targetPath>WEB-INF/lib</targetPath>
+							<filtering>false</filtering>
+							<includes>
+								<include>**/*.jar</include>
+							</includes>
+						</resource>
+					</webResources>
+				</configuration>
+				<version>2.2</version>
 			</plugin>
 		</plugins>
 	</build>
@@ -65,7 +83,8 @@
 			<groupId>qoe.algorithm</groupId>
 			<artifactId>qoe.algorithm</artifactId>
 			<version>1.0</version>
-			<systemPath>${basedir}/lib/QoE_algorithm.jar</systemPath>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/QoE_algorithm.jar</systemPath>
 		</dependency>
 
 		<!--使用junit4 可以使用注解 -->
