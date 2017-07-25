@@ -1,5 +1,6 @@
 package cn.bupt.qoe.web.controller;
 
+import cn.bupt.qoe.pojo.HotMapData;
 import com.algorithm.QoE;
 import cn.bupt.qoe.mapper.DetectDataMapper;
 import cn.bupt.qoe.model.DetectData;
@@ -26,14 +27,25 @@ public class DetectDataController {
 
     @Autowired
     DetectDataMapper mapper;
+
     //返回json格式的数据
     @RequestMapping("/data")
     @ResponseBody//对象变json
-    public WebResult getAllDetectData(){
+    public WebResult getAllDetectDataAndMos(){
         WebResult result = new WebResult();
         result.setData(mapper.getAllDetectData());
         return result;
     }
+
+    @RequestMapping(value="hotmap", method = RequestMethod.GET)
+    @ResponseBody
+    public WebResult getHotMapData(@RequestParam(value = "area", defaultValue = "ALL") String area){
+        WebResult result = new WebResult();
+        result.setData(mapper.getAllHotMapData());
+        return result;
+    }
+
+
 
     //安卓测量数据持久化
     @RequestMapping(value = "/insert", method = RequestMethod.POST)

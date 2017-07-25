@@ -15,7 +15,7 @@ function showMapData(){
 		});
 	console.log("1.发送ajax请求")
 	$.ajax({
-		url:"http://localhost:8080/qoe/api/detect/data",
+		url:"http://10.103.93.104:8080/qoe/api/detect/data",
 		dataType:"json",
 		type:"GET",
 		success:function(response){

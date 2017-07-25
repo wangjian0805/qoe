@@ -1,6 +1,8 @@
 package cn.bupt.qoe.mapper;
 
 import cn.bupt.qoe.model.DetectData;
+import cn.bupt.qoe.pojo.DetectDataWithMos;
+import cn.bupt.qoe.pojo.HotMapData;
 import cn.bupt.qoe.rest.WebResult;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
@@ -15,8 +17,13 @@ import java.util.List;
  */
 public interface DetectDataMapper {
 
-	@Select(value = "select * from detect_by_wifi order by detect_time desc")
-	List<DetectData> getAllDetectData();
+
+	@Select(value = "select m.mos,d.latitude,d.longitude from qoe_id as m, detect_by_wifi as d" +
+			"		where m.result_id=d.result_id")
+	List<HotMapData> getAllHotMapData();
+
+	@Select(value = "select d.*, m.mos from detect_by_wifi as d, qoe_id as m where m.result_id=d.result_id order by detect_time desc")
+	List<DetectDataWithMos> getAllDetectData();
 
 	List<DetectData> selectAllByPage(PageBounds pageBounds);
 
