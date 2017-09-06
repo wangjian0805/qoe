@@ -10,10 +10,16 @@ import cn.bupt.qoe.rest.WebResult;
 import cn.bupt.qoe.service.DetectResultService;
 import cn.bupt.qoe.util.PaginatorResult;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Ambitous on 2017/7/16.
@@ -21,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/api/detect")
 public class DetectDataController {
+
+    private static final Logger logger = LoggerFactory.getLogger(DetectDataController.class);
 
     @Autowired
     DetectResultService detectResultService;
@@ -53,8 +61,6 @@ public class DetectDataController {
     public WebResult insertDetectData(@RequestBody DetectData detectData) {
 
         WebResult result = new WebResult();
-        int insertReturn = mapper.insertDetectData(detectData);
-        Long id = mapper.getLastInsertId();
         QoE qoe = new QoE(
                 detectData.getCpu(),
                 detectData.getMemoryConsumption(),
@@ -66,10 +72,12 @@ public class DetectDataController {
                 detectData.getMessageDelay()
         );
         double mos = qoe.getMOS();
-        System.out.println("id为："+id);
-        System.out.println("mos为："+mos);
-        int insertMosResutn = mapper.insertMos(id, mos);
+        System.out.println(mos);
+        detectData.setMosObj(mos);
+        int insertReturn = mapper.insertDetectData(detectData);
+        Long id = mapper.getLastInsertId();
         if (insertReturn == 1) {
+            logger.info("Insert Succuss! "+detectData.toString());
             result.setMessage("插入成功");
             result.setData(1);
         } else {
@@ -98,4 +106,13 @@ public class DetectDataController {
     }
     //@RequestMapping(value = "/highcharts", method = RequestMethod.POST)
 
+    @RequestMapping("/testw")
+    @ResponseBody
+    public WebResult getTest(){
+        WebResult result = new WebResult();
+        Map map = new HashMap();
+        map.put("result_id",9999l);
+        result.setData(mapper.getTest(map));
+        return result;
+    }
 }

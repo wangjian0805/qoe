@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Ambitous on 2017/7/16.
@@ -18,11 +19,10 @@ import java.util.List;
 public interface DetectDataMapper {
 
 
-	@Select(value = "select m.mos,d.latitude,d.longitude from qoe_id as m, detect_by_wifi as d" +
-			"		where m.result_id=d.result_id")
+	@Select(value = "select mos_sub,mos_obj,latitude,longitude from qoe_mos")
 	List<HotMapData> getAllHotMapData();
 
-	@Select(value = "select d.*, m.mos from detect_by_wifi as d, qoe_id as m where m.result_id=d.result_id order by detect_time desc")
+	@Select(value = "select * from qoe_mos order by detect_time desc")
 	List<DetectDataWithMos> getAllDetectData();
 
 	List<DetectData> selectAllByPage(PageBounds pageBounds);
@@ -33,18 +33,27 @@ public interface DetectDataMapper {
 	@Insert(value = "insert into qoe_id values (#{result_id,jdbcType=BIGINT}, #{mos,jdbcType=DOUBLE})")
 	int insertMos(@Param(value = "result_id") Long result_id, @Param(value = "mos") Double mos);
 
-	@Insert(value = "insert into detect_by_wifi values (#{resultId,jdbcType=BIGINT}, " +
+	@Insert(value = "insert into qoe_mos values (#{resultId,jdbcType=BIGINT}, " +
 			"                                           #{cpu,jdbcType=INTEGER}, " +
 			"                                           #{memoryConsumption,jdbcType=INTEGER}, " +
 			"                                           #{screenPixels,jdbcType=INTEGER}, " +
 			"                                           #{videoStreamBitrate,jdbcType=INTEGER}, " +
 			"                                           #{throughput,jdbcType=INTEGER}, " +
-			"                                           #{initBuffer,jdbcType=INTEGER}, " +
-			"                                           #{reservedBuffer,jdbcType=INTEGER}, " +
+			"                                           #{initBuffer,jdbcType=DOUBLE}, " +
+			"                                           #{reservedBuffer,jdbcType=DOUBLE}, " +
 			"                                           #{videoLength,jdbcType=INTEGER}, " +
 			"                                           #{messageDelay,jdbcType=INTEGER}, " +
 			"                                           #{latitude,jdbcType=DOUBLE}, " +
 			"                                           #{longitude,jdbcType=DOUBLE}, " +
-			"                                           #{detectTime,jdbcType=TIMESTAMP})")
+			"											#{mos_sub,jdbcType=DOUBLE}, " +
+			"											#{mos_obj,jdbcType=DOUBLE}," +
+			"                                           #{detectTime,jdbcType=TIMESTAMP}) ")
 	int insertDetectData(DetectData data);
+
+	@Select({"<script>",
+			"select * from qoe_mos where 1=1",
+			"<when test='result_id!=null'>","and result_id=#{result_id}","</when>",
+			"</script>"
+	})
+	List<DetectData> getTest(Map map);
 }

@@ -15,9 +15,9 @@ public class DetectData {
 
     private Integer throughput;
 
-    private Integer initBuffer;
+    private Double initBuffer;
 
-    private Integer reservedBuffer;
+    private Double reservedBuffer;
 
     private Integer videoLength;
 
@@ -26,6 +26,10 @@ public class DetectData {
     private Double latitude;
 
     private Double longitude;
+
+    private Double mosObj;
+
+    private Double mosSub;
 
     private Date detectTime;
 
@@ -77,19 +81,19 @@ public class DetectData {
         this.throughput = throughput;
     }
 
-    public Integer getInitBuffer() {
+    public Double getInitBuffer() {
         return initBuffer;
     }
 
-    public void setInitBuffer(Integer initBuffer) {
+    public void setInitBuffer(Double initBuffer) {
         this.initBuffer = initBuffer;
     }
 
-    public Integer getReservedBuffer() {
+    public Double getReservedBuffer() {
         return reservedBuffer;
     }
 
-    public void setReservedBuffer(Integer reservedBuffer) {
+    public void setReservedBuffer(Double reservedBuffer) {
         this.reservedBuffer = reservedBuffer;
     }
 
@@ -133,9 +137,25 @@ public class DetectData {
         this.detectTime = detectTime;
     }
 
+    public Double getMosObj() {
+        return mosObj;
+    }
+
+    public void setMosObj(Double mosObj) {
+        this.mosObj = mosObj;
+    }
+
+    public Double getMosSub() {
+        return mosSub;
+    }
+
+    public void setMosSub(Double mosSub) {
+        this.mosSub = mosSub;
+    }
+
     @Override
     public String toString() {
-        return "DetectResult{" +
+        return "DetectData{" +
                 "resultId=" + resultId +
                 ", cpu=" + cpu +
                 ", memoryConsumption=" + memoryConsumption +
@@ -148,6 +168,8 @@ public class DetectData {
                 ", messageDelay=" + messageDelay +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
+                ", mosObj=" + mosObj +
+                ", mosSub=" + mosSub +
                 ", detectTime=" + detectTime +
                 '}';
     }
