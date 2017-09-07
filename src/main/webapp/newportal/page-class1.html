@@ -60,14 +60,12 @@
         function loadDetectResultPage(currentPage, limit) {
             //先销毁表格
             $('#table').bootstrapTable('destroy');
-
             //var queryTableName=$('#keyword').val();
-
             $("#table").bootstrapTable({
                 method: "post",  //使用get请求到服务器获取数据
                 contentType: "application/x-www-form-urlencoded",
                 dataType: "json",
-                url: 'http://localhost:8080/api/detect/detail', //获取数据的Servlet地址
+                url: 'http://10.103.93.104:8080/qoe/api/detect/detail', //获取数据的Servlet地址
                 striped: true,  //表格显示条纹
                 pagination: true, //启动分页
                 pageSize: limit,  //每页显示的记录数
@@ -87,7 +85,9 @@
                     };
                     return param;
                 },
-                onLoadSuccess: function(data){  //加载成功时执行
+                onLoadSuccess: function(data){  
+                	console.log("data: "+data);
+                	//加载成功时执行
                 },
                 onLoadError: function(){  //加载失败时执行
                     bootbox.alert("加载数据失败");
@@ -96,7 +96,7 @@
                     checkbox: true
                 }, {
                     field: 'resultId',
-                    title: '测试ID',
+                    title: 'ID',
                     valign: 'middle',
                     align: 'center',
                     order:'asc'
@@ -104,46 +104,46 @@
                     field: 'cpu',
                     valign: 'middle',
                     align: 'center',
-                    title: 'cpu主频'
+                    title: '主频/KHz'
                 }, {
                     field: 'memoryConsumption',
                     class:"hidden",
-                    title: '内存消耗量'
+                    title: '内存消耗/%'
                 },{
                     field: 'screenPixels',
                     valign: 'middle',
                     align: 'center',
-                    title: '屏幕像素密度',
+                    title: '像素密度/ppi',
                 },{
                     field: 'videoStreamBitrate',
                     valign: 'middle',
                     align: 'center',
-                    title: '视频流平均比特率',
+                    title: '码率/kbps',
                 },{
                     field: 'throughput',
                     valign: 'middle',
                     align: 'center',
-                    title: '吞吐量',
+                    title: '吞吐量kbps',
                 },{
                     field: 'initBuffer',
                     valign: 'middle',
                     align: 'center',
-                    title: '初始化缓冲区',
+                    title: '初始化缓冲区/s',
                 },{
                     field: 'reservedBuffer',
                     valign: 'middle',
                     align: 'center',
-                    title: '预留缓冲区',
+                    title: '预留缓冲区/s',
                 },{
                     field: 'videoLength',
                     valign: 'middle',
                     align: 'center',
-                    title: '视频长度',
+                    title: '视频长度/s',
                 },{
                     field: 'messageDelay',
                     valign: 'middle',
                     align: 'center',
-                    title: '消息时延',
+                    title: '消息时延/s',
                 },{
                     field: 'latitude',
                     valign: 'middle',
@@ -165,6 +165,18 @@
                         }
                         return "无";
                     }
+                },
+                {
+                    field: 'mosObj',
+                    valign: 'middle',
+                    align: 'center',
+                    title: '客观mos',
+                },
+                {
+                    field: 'mosSub',
+                    valign: 'middle',
+                    align: 'center',
+                    title: '主观mos',
                 }],
                 responseHandler : function(res) {
                     $('#currentPage').val(currentPage);
@@ -265,6 +277,17 @@
 							<div id="container-1" style="min-width:400px;height:400px"></div>
 							<script>
                                 $(function () {
+                                	//获取当前日期，并获取前七天的日期
+                                	var datesForshow = ["","","","","","",""];
+                                	var mydate = new Date();
+                                	mydate.setDate(mydate.getDate()-7);
+                                	//console.log(mydate.getMonth()+"月"+mydate.getDate()+"日");
+                                	for(var i=0;i<7;i++){
+                                		datesForshow[i] = mydate.getMonth()+1+"月"+mydate.getDate()+"日";
+                                		console.log(datesForshow[i]);
+                                		mydate.setDate(mydate.getDate()+1);
+                                	}
+                                	
                                     $('#container-1').highcharts({
                                         chart: {
                                             type: 'line'
@@ -276,7 +299,7 @@
                                             text: '数据来源: Lab640'
                                         },
                                         xAxis: {
-                                            categories: ['7月8号', '7月9号', '7月10号', '7月11号', '7月12号', '7月13号', '7月14号', '7月15号', '7月16号', '7月17号', '7月18号', '7月19号']
+                                            categories: datesForshow
                                         },
                                         yAxis: {
                                             title: {
@@ -293,10 +316,10 @@
                                         },
                                         series: [{
                                             name: '平均值',
-                                            data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+                                            data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2]
                                         }, {
                                             name: '标准差',
-                                            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+                                            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0]
                                         }]
                                     });
                                 });
@@ -340,11 +363,11 @@
                                         },
                                         series: [{
                                             name: 'KPI测量值',
-                                            data: [43000, 19000, 60000, 35000, 17000, 10000],
+                                            data: [43, 19, 60, 35, 17, 10],
                                             pointPlacement: 'on'
                                         }, {
                                             name: '经过KCM算法归一化后的值',
-                                            data: [50000, 39000, 42000, 31000, 26000, 14000],
+                                            data: [5, 39, 42, 31, 26, 14],
                                             pointPlacement: 'on'
                                         }]
                                     });

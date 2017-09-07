@@ -10,8 +10,8 @@ function showMapData(){
 	var myIcon1 =new BMap.Icon("http://10.103.93.3:8080/WiBUPTInfo/transparent.png", new BMap.Size(90, 90), {imageOffset: new BMap.Size(0, 0)});
 	var myShadowIcon = new BMap.Icon("http://10.103.93.3:8080/WiBUPTInfo/transparent.png", new BMap.Size(90, 90), {imageOffset: new BMap.Size(0, 0)});
 	var points  = [];
-	heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":50,
-		"gradient":{".3":'rgb(70,176,53)',".5":'rgb(155,199,2)',".7":'rgb(255,174,0)',".8":'rgb(255,114,0)',".9":'rgb(253,48,35)'}
+	heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":30,
+		"gradient":{".3":'rgb(70,176,53)',".5":'rgb(155,199,2)',".7":'rgb(255,174,0)',".9":'rgb(253,48,35)'}
 		});
 	console.log("1.发送ajax请求")
 	$.ajax({
@@ -27,7 +27,7 @@ function showMapData(){
 			point={
 			"lng":data[i].longitude,
 			"lat":data[i].latitude,
-			"count":3,
+			"count":data[i].mos
 			};
 			console.log("point"+i+": "+point.lng+", "+point.lat+", "+point.count);
 			points[i]=point;

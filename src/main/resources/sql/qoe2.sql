@@ -1,0 +1,20 @@
+CREATE TABLE qoe_mos(
+  `result_id` BIGINT NOT NUll AUTO_INCREMENT COMMENT '测试ID',
+  `cpu` INT NOT NULL COMMENT '测试cpu 单位:kHz',
+  `memory_consumption` INT NOT NULL COMMENT '库存数量 单位：%',
+  `screen_pixels` INT NOT NULL COMMENT '屏幕像素密度 单位：ppi',
+  `video_stream_bitRate` INT NOT NULL COMMENT '视频流平均比特率 单位：kbps',
+  `throughput` INT NOT NULL COMMENT '吞吐量 单位：kbps',
+  `init_buffer` DOUBLE NOT NULL COMMENT '初始化设置的缓冲区大小 单位：s',
+  `reserved_buffer` DOUBLE NOT NULL COMMENT '预留的缓冲区大小 单位：s',
+  `video_length` INT NOT NULL COMMENT '视频长度 单位：s',
+  `message_delay` INT NOT NULL COMMENT '消息时延 单位：s',
+  `latitude` DOUBLE(11,6) NOT NULL COMMENT '探测纬度',
+  `longitude` DOUBLE(11,6) NOT NULL COMMENT '探测经度',
+  `mos_obj` DOUBLE NOT NULL COMMENT '主观mos值',
+  `mos_sub` DOUBLE NOT NULL COMMENT '客观mos值',
+  `detect_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '探测时间',
+  PRIMARY KEY (result_id),
+  key idx_latitude_longitude(latitude,longitude),
+  key idx_detect_time(detect_time)
+)ENGINE=INNODB AUTO_INCREMENT=100000 DEFAULT CHARSET=utf8 COMMENT='KPI的Wifi探测数据集';
