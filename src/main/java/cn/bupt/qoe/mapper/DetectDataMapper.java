@@ -45,8 +45,8 @@ public interface DetectDataMapper {
 			"                                           #{messageDelay,jdbcType=INTEGER}, " +
 			"                                           #{latitude,jdbcType=DOUBLE}, " +
 			"                                           #{longitude,jdbcType=DOUBLE}, " +
-			"											#{mosSub,jdbcType=DOUBLE}, " +
-			"											#{mosObj,jdbcType=DOUBLE}," +
+			"											#{mosObj,jdbcType=DOUBLE}, " +
+			"											#{mosSub,jdbcType=DOUBLE}," +
 			"                                           #{detectTime,jdbcType=TIMESTAMP}) ")
 	int insertDetectData(DetectData data);
 

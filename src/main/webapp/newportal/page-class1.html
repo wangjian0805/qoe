@@ -65,7 +65,7 @@
                 method: "post",  //使用get请求到服务器获取数据
                 contentType: "application/x-www-form-urlencoded",
                 dataType: "json",
-                url: 'http://10.103.93.104:8080/qoe/api/detect/detail', //获取数据的Servlet地址
+                url: 'http://localhost:58080/qoe/api/detect/detail', //获取数据的Servlet地址
                 striped: true,  //表格显示条纹
                 pagination: true, //启动分页
                 pageSize: limit,  //每页显示的记录数
@@ -113,7 +113,7 @@
                     field: 'screenPixels',
                     valign: 'middle',
                     align: 'center',
-                    title: '像素密度/ppi',
+                    title: '像素/ppi',
                 },{
                     field: 'videoStreamBitrate',
                     valign: 'middle',
@@ -123,12 +123,12 @@
                     field: 'throughput',
                     valign: 'middle',
                     align: 'center',
-                    title: '吞吐量kbps',
+                    title: '吞吐量/kbps',
                 },{
                     field: 'initBuffer',
                     valign: 'middle',
                     align: 'center',
-                    title: '初始化缓冲区/s',
+                    title: '初始缓冲区/s',
                 },{
                     field: 'reservedBuffer',
                     valign: 'middle',
@@ -143,7 +143,7 @@
                     field: 'messageDelay',
                     valign: 'middle',
                     align: 'center',
-                    title: '消息时延/s',
+                    title: '消息时延/ms',
                 },{
                     field: 'latitude',
                     valign: 'middle',

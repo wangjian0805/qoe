@@ -59,8 +59,10 @@ public class DetectDataController {
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     @ResponseBody
     public WebResult insertDetectData(@RequestBody DetectData detectData) {
-
+    	System.out.println("进入方法");
         WebResult result = new WebResult();
+        logger.info("准备计算QoE并上传mysql："+detectData.toString());
+        System.out.println("准备计算QoE并上传mysql："+detectData.toString());
         QoE qoe = new QoE(
                 detectData.getCpu(),
                 detectData.getMemoryConsumption(),
