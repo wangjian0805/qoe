@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-	<title>QoE用户体验质量</title>
+	<title>移动视频业务QoE评测系统</title>
 	<meta charset="utf-8">
 	<link rel="icon" href="https://static.jianshukeji.com/highcharts/images/favicon.ico">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -10,6 +10,7 @@
 	<!-- VENDOR CSS -->
 
 	<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="assets/vendor/linearicons/style.css">
 	<!-- MAIN CSS -->
@@ -25,16 +26,51 @@
 	<!-- Javascript -->
 	<script src="assets/vendor/jquery/jquery.min.js"></script>
 	<script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="assets/vendor/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+	<script src="assets/vendor/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 	<script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 	<script src="assets/scripts/klorofil-common.js"></script>
 	<script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
+	<script src="https://img.hcharts.cn/highcharts/highcharts-3d.js"></script>
+	<script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
 	<script src="https://img.hcharts.cn/highcharts/highcharts-more.js"></script>
 	<script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
 	<script src="https://img.hcharts.cn/highcharts/themes/sand-signika.js"></script>
 
 	<link href="assets/vendor/bootstrap/css/bootstrap-table.css" rel="stylesheet">
 	<script src="assets/vendor/bootstrap/js/bootstrap-table.js"></script>
+	<!--搜索事件-->
+	<script type="application/javascript">
+		var spider_chart
+		var td_chart
+		var score_chart
+		var pick_start_time = 0
+		var pick_end_time = 0
+		var pick_mac = 0
+		var postData = "{pick_start_time:'"+pick_start_time+"',pick_end_time:'"+pick_end_time+"',pick_mac:'"+pick_mac+"'}"
 
+		function search() {
+            console.info(postData)
+			pick_mac = $("#search_mac").val()
+            $.ajax({
+                url:"http://localhost:8080/api/high/itemlist",
+                dataType:"json",
+				data:{"pick_start_time":pick_start_time,"pick_end_time":pick_end_time,"pick_mac":pick_mac},
+                type:"GET",
+                success:function(response){
+                    var data = response.data;
+                    console
+                    for(var i=0;i<20;i++){
+                        console.info(data[i])
+                        $(".list-group-item").eq(i+1).val(data[i])
+                        $(".list-group-item").eq(i+1).html(data[i])
+					}
+
+                }
+            });
+        }
+	</script>
+	<!--时间格式-->
 	<script type="application/javascript">
         Date.prototype.Format = function (fmt) { //author: meizz
             var o = {
@@ -52,139 +88,28 @@
             return fmt;
         }
 	</script>
+	<!--点击按钮事件-->
 	<script type="application/javascript">
-        $(document).ready(function() {
-            loadDetectResultPage(1, 5);
-        });
+		function changeChart(btn) {
+		    var mac_time = btn.value
+			console.info(mac_time)
+//			$("#spider-container").hide();
+//			$("#3d-container").hide();
+			$("#sliders").hide();
 
-        function loadDetectResultPage(currentPage, limit) {
-            //先销毁表格
-            $('#table').bootstrapTable('destroy');
+            $.ajax({
+                url:"http://localhost:8080/api/high/score",
+                dataType:"json",
+                type:"GET",
+                success:function(response){
+                    var data = response.data;
 
-            //var queryTableName=$('#keyword').val();
-
-            $("#table").bootstrapTable({
-                method: "post",  //使用get请求到服务器获取数据
-                contentType: "application/x-www-form-urlencoded",
-                dataType: "json",
-                url: 'http://localhost:8080/api/detect/detail', //获取数据的Servlet地址
-                striped: true,  //表格显示条纹
-                pagination: true, //启动分页
-                pageSize: limit,  //每页显示的记录数
-                pageNumber:currentPage, //当前第几页
-                pageList: [5, 10, 15, 20, 25],  //记录数可选列表
-                search: false,  //是否启用查询
-                sidePagination: "server", //表示服务端请求
-                clickToSelect: true,
-                undefinedText:'',
-                //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
-                //设置为limit可以获取limit, offset, search, sort, order
-                queryParamsType : "undefined",
-                queryParams: function queryParams(params) {   //设置查询参数
-                    var param = {
-                        pageSize: params.pageNumber,
-                        pageNumber: params.pageSize
-                    };
-                    return param;
-                },
-                onLoadSuccess: function(data){  //加载成功时执行
-                },
-                onLoadError: function(){  //加载失败时执行
-                    bootbox.alert("加载数据失败");
-                },
-                columns: [{
-                    checkbox: true
-                }, {
-                    field: 'resultId',
-                    title: '测试ID',
-                    valign: 'middle',
-                    align: 'center',
-                    order:'asc'
-                }, {
-                    field: 'cpu',
-                    valign: 'middle',
-                    align: 'center',
-                    title: 'cpu主频'
-                }, {
-                    field: 'memoryConsumption',
-                    class:"hidden",
-                    title: '内存消耗量'
-                },{
-                    field: 'screenPixels',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '屏幕像素密度',
-                },{
-                    field: 'videoStreamBitrate',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '视频流平均比特率',
-                },{
-                    field: 'throughput',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '吞吐量',
-                },{
-                    field: 'initBuffer',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '初始化缓冲区',
-                },{
-                    field: 'reservedBuffer',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '预留缓冲区',
-                },{
-                    field: 'videoLength',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '视频长度',
-                },{
-                    field: 'messageDelay',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '消息时延',
-                },{
-                    field: 'latitude',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '纬度',
-                },{
-                    field: 'longitude',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '经度',
-                },{
-                    field: 'detectTime',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '测试时间',
-                    formatter: function (value, row, index) {
-                        if(value!=null){
-                            return new Date(parseInt(value)).Format('yyyy-MM-dd HH:mm:ss');
-                        }
-                        return "无";
-                    }
-                }],
-                responseHandler : function(res) {
-                    $('#currentPage').val(currentPage);
-                    $('#limit').val(limit);
-                    if(res.total > 0) {
-                        return {
-                            "rows": res.rows,
-                            "total": res.total
-                        }
-                    } else {
-                        return {
-                            "rows": [],
-                            "total": 0
-                        }
-                    }
-                },
+                }
             });
-        }
 
+        }
 	</script>
+
 </head>
 
 <body>
@@ -192,8 +117,8 @@
 <div id="wrapper">
 	<!-- NAVBAR -->
 	<nav class="navbar navbar-default navbar-fixed-top">
-		<div class="brand">
-			<a href="index.html"/><span class="span-wangjian">用户体验质量QoE</span>
+		<div class="brand" style="width: 500px;">
+			<a href="index.html"/><span class="span-wangjian" style="width:300px;">移动视频业务QoE评测系统</span>
 		</div>
 		<div class="container-fluid">
 
@@ -240,10 +165,8 @@
 						<a href="#subPages" data-toggle="collapse" class="active"><i class="lnr lnr-chart-bars"></i> <span>详情页</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
 						<div id="subPages" class="collapse in">
 							<ul class="nav">
-								<li><a href="page-class1.html" class="">教一</a></li>
-								<li><a href="page-class2.html" class="active">教二</a></li>
-								<li><a href="page-class3.html" class="">教三</a></li>
-								<li><a href="page-class4.html" class="">教四</a></li>
+								<li><a href="page-class1.html" class="">数据总览</a></li>
+								<li><a href="page-class2.html" class="">区域详情</a></li>
 							</ul>
 						</div>
 					</li>
@@ -260,97 +183,97 @@
 			<div class="container-fluid">
 				<div class="panel panel-profile">
 					<div class="clearfix">
-						<h2 class="panel-title text-center">测试点详细信息</h2>
-						<table id="table" class="table table-hover" data-show-refresh="false" data-show-toggle="false" data-show-columns="false" data-switchable="true" data-select-item-name="subBox" data-pagination="true" data-sort-order="desc"></table>
-						<div id="container-1" style="min-width:400px;height:400px"></div>
-						<script>
-                            $(function () {
-                                $('#container-1').highcharts({
-                                    chart: {
-                                        type: 'line'
-                                    },
-                                    title: {
-                                        text: '月平均气温'
-                                    },
-                                    subtitle: {
-                                        text: '数据来源: WorldClimate.com'
-                                    },
-                                    xAxis: {
-                                        categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
-                                    },
-                                    yAxis: {
-                                        title: {
-                                            text: '气温 (°C)'
-                                        }
-                                    },
-                                    plotOptions: {
-                                        line: {
-                                            dataLabels: {
-                                                enabled: true          // 开启数据标签
-                                            },
-                                            enableMouseTracking: false // 关闭鼠标跟踪，对应的提示框、点击事件会失效
-                                        }
-                                    },
-                                    series: [{
-                                        name: '东京',
-                                        data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-                                    }, {
-                                        name: '伦敦',
-                                        data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-                                    }]
-                                });
-                            });
+						<div id="top-container" style="width:100%;height:80px;" >
+							<h1 style="align:center;text-align:center;font-family:Microsoft YaHei;">测试点详情页</h1>
+						</div>
+						<!--<div id="page-nav" style="display: block;">-->
+							<!--<nav>-->
+								<!--<ul class="pagination" onselectstart="return false"-->
+									<!--style="display: block;">-->
+									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看教一实时流量图" data-toggle="tooltip" data-placement="top" title="点击查看实时流量图"  value="1"-->
+										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building1.jpg);background-repeat: no-repeat;-->
+    <!--background-position: center;"><p-->
+											<!--class="buildingName">教一</p>-->
+									<!--</li>-->
+									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看教二实时流量图" data-toggle="tooltip" data-placement="top" title="点击查看实时流量图" value="2"-->
+										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building2.jpg);background-repeat: no-repeat;-->
+    <!--background-position: center;"><p-->
+											<!--class="buildingName">教二</p>-->
+									<!--</li>-->
+									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看教三实时流量图" data-toggle="tooltip" data-placement="top" title="点击查看实时流量图" value="3"-->
+										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building3.jpg);background-repeat: no-repeat;-->
+    <!--background-position: center;"><p-->
+											<!--class="buildingName">教三</p>-->
+									<!--</li>-->
+									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看教四实时流量图" data-toggle="tooltip" data-placement="top" title="点击查看实时流量图" value="4"-->
+										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building4.jpg);background-repeat: no-repeat;-->
+    <!--background-position: center;"><p-->
+											<!--class="buildingName">教四</p>-->
+									<!--</li>-->
+									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看新科研楼实时流量图" value="5"-->
+										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building5.jpg);background-repeat: no-repeat;-->
+    <!--background-position: center;"><p-->
+											<!--class="buildingName">新科研楼</p>-->
+									<!--</li>-->
+									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看主楼实时流量图" value="6"-->
+										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building6.jpg);background-repeat: no-repeat;-->
+    <!--background-position: center;"><p-->
+											<!--class="buildingName">主楼</p>-->
+									<!--</li>-->
+									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看综合餐厅实时流量图" value="7"-->
+										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building7.jpg);background-repeat: no-repeat;-->
+    <!--background-position: center;"><p-->
+											<!--class="buildingName">综合餐厅</p>-->
+									<!--</li>-->
+									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看学生食堂实时流量图" value="8"-->
+										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building8.jpg);background-repeat: no-repeat;-->
+    <!--background-position: center;"><p-->
+											<!--class="buildingName">学生食堂</p>-->
+									<!--</li>-->
+									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看学生公寓1实时流量图" value="9"-->
+										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building9.jpg);background-repeat: no-repeat;-->
+    <!--background-position: center;"><p-->
+											<!--class="buildingName">学生公寓1</p>-->
+									<!--</li>-->
+									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看实时流量图" value="10"-->
+										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building10.jpg);background-repeat: no-repeat;-->
+    <!--background-position: center;"><p-->
+											<!--class="buildingName">学生公寓2</p>-->
+									<!--</li>-->
+								<!--</ul>-->
+							<!--</nav>-->
+						<!--</div>-->
+						<!--<div id="list-container" style="width:25%;height:910px;float:left;">-->
+							<!--<div class="list-group">-->
+								<!--<a href="#" class="list-group-item active">测量区域列表</a>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">教学楼一</button>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">教学楼二</button>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">教学楼三</button>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">教学楼四</button>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">主楼</button>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">毛主席雕像</button>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">西门</button>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">图书馆</button>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">综合餐厅</button>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学苑餐厅</button>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生一号宿舍楼</button>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生二号宿舍楼</button>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生三号宿舍楼</button>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生四号宿舍楼</button>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生五号宿舍楼</button>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生六号宿舍楼</button>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生八号宿舍楼</button>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生九号宿舍楼</button>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生十号宿舍楼</button>-->
+								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生十三号宿舍楼</button>-->
+								<!--<button type="button" class="btn btn-warning btn-toastr" data-context="warning" data-message="This is warning info" data-position="top-right" style="float:left;width: 50%;">最近10条</button>-->
+								<!--<button type="button" class="btn btn-danger btn-toastr" data-context="error" data-message="This is error info" data-position="top-right" style="float: left;width: 50%;">随机10条</button>-->
+							<!--</div>-->
+						<!--</div>-->
+						<div id="3d-container" style="width:100%;height: 500px;"></div>
 
-						</script>
-						<div id="container-2" style="min-width:400px;max-width: 600px;height:400px;margin: 0 auto"></div>
-						<script>
-                            $(function () {
-                                $('#container-2').highcharts({
-                                    chart: {
-                                        polar: true,
-                                        type: 'line'
-                                    },
-                                    title: {
-                                        text: '预算与支出',
-                                        x: -80
-                                    },
-                                    pane: {
-                                        size: '80%'
-                                    },
-                                    xAxis: {
-                                        categories: ['销售', '市场营销', '发展', '客户支持',
-                                            '信息技术', '行政管理'],
-                                        tickmarkPlacement: 'on',
-                                        lineWidth: 0
-                                    },
-                                    yAxis: {
-                                        gridLineInterpolation: 'polygon',
-                                        lineWidth: 0,
-                                        min: 0
-                                    },
-                                    tooltip: {
-                                        shared: true,
-                                        pointFormat: '<span style="color:{series.color}">{series.name}: <b>${point.y:,.0f}</b><br/>'
-                                    },
-                                    legend: {
-                                        align: 'right',
-                                        verticalAlign: 'top',
-                                        y: 70,
-                                        layout: 'vertical'
-                                    },
-                                    series: [{
-                                        name: '预算拨款',
-                                        data: [43000, 19000, 60000, 35000, 17000, 10000],
-                                        pointPlacement: 'on'
-                                    }, {
-                                        name: '实际支出',
-                                        data: [50000, 39000, 42000, 31000, 26000, 14000],
-                                        pointPlacement: 'on'
-                                    }]
-                                });
-                            });
 
-						</script>
+						<div id="wall-container" style="width:100%;height: 10px;float: left;"></div>
 					</div>
 				</div>
 			</div>
@@ -362,10 +285,65 @@
 	<footer>
 		<div class="container-fluid">
 			<p class="copyright">&copy; 2017 <a href="#" target="_blank">Lab640</a>. All Rights Reserved.</p>
-		</div>
-	</footer>
+		</div>	</footer>
 </div>
 <!-- END WRAPPER -->
+<!-- SCRIPT -->
+
+<!--3d图示-->
+<script>
+    $(function () {
+        // Set up the chart
+        td_chart = new Highcharts.Chart({
+//        $('#container').highcharts({
+            chart: {
+                renderTo: '3d-container',
+                type: 'line'
+            },
+            title: {
+                text: 'QoE评测中主客观Mos值对比情况'
+            },
+            subtitle: {
+                text: 'QoE平台'
+            },
+            xAxis: {
+                title:'测量次序',
+                categories: []
+            },
+            yAxis: {
+                title: {
+                    text: 'Mos值（1~5）'
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true          // 开启数据标签
+                    },
+                    enableMouseTracking: false // 关闭鼠标跟踪，对应的提示框、点击事件会失效
+                }
+            },
+            series: [{
+                name: '主观Mos值',
+                data: []
+            }, {
+                name: '客观Mos值',
+                data: []
+            }]
+        });
+        $.ajax({
+            url:"http://localhost:8080/api/high/osCompare",
+            dataType:"json",
+            type:"GET",
+            success:function(response){
+                var data = response.data;
+                td_chart.xAxis.categories = data[0]
+                td_chart.series[0].setData(data[1])
+                td_chart.series[1].setData(data[2])
+            }
+        });
+    });
+</script>
 
 </body>
 

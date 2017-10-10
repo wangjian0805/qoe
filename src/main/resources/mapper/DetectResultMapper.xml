@@ -1,26 +1,70 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.bupt.qoe.mapper.DetectDataMapper" >
-  <resultMap id="BaseResultMap" type="cn.bupt.qoe.model.DetectData" >
-    <id column="result_id" property="resultId" jdbcType="BIGINT" />
-    <result column="cpu" property="cpu" jdbcType="INTEGER" />
-    <result column="memory_consumption" property="memoryConsumption" jdbcType="INTEGER" />
-    <result column="screen_pixels" property="screenPixels" jdbcType="INTEGER" />
-    <result column="video_stream_bitRate" property="videoStreamBitrate" jdbcType="INTEGER" />
-    <result column="throughput" property="throughput" jdbcType="INTEGER" />
-    <result column="init_buffer" property="initBuffer" jdbcType="DOUBLE" />
-    <result column="reserved_buffer" property="reservedBuffer" jdbcType="DOUBLE" />
-    <result column="video_length" property="videoLength" jdbcType="INTEGER" />
-    <result column="message_delay" property="messageDelay" jdbcType="INTEGER" />
-    <result column="latitude" property="latitude" jdbcType="DOUBLE" />
-    <result column="longitude" property="longitude" jdbcType="DOUBLE" />
-    <result column="mos_obj" property="mosObj" jdbcType="DOUBLE" />
-    <result column="mos_sub" property="mosSub" jdbcType="DOUBLE" />
-    <result column="detect_time" property="detectTime" jdbcType="TIMESTAMP" />
+
+
+  <resultMap type="cn.bupt.qoe.model.TestData" id="testDataMap">
+    <id column="id" property="id"/>
+    <result column="mos_sub" property="mos_sub"/>
+    <result column="mos_obj" property="mos_obj"/>
+    <result column="testTime" property="testTime"/>
+    <result column="testTimeStamp" property="testTimeStamp"/>
+    <result column="messageDelay" property="messageDelay"/>
+    <result column="longitude" property="longitude"/>
+    <result column="latitude" property="latitude"/>
+    <result column="mark" property="mark"/>
   </resultMap>
+
+  <resultMap type="cn.bupt.qoe.model.MonitorData" id="monitorDataMap">
+    <id column="id" property="id"/>
+    <result column="monitorTime" property="monitorTime"/>
+    <result column="monitorTimeStamp" property="monitorTimeStamp"/>
+    <result column="sendSpeed" property="sendSpeed"/>
+    <result column="netSpeed" property="netSpeed"/>
+    <result column="bufferPercentage" property="bufferPercentage"/>
+    <result column="memoryConsumption" property="memoryConsumption"/>
+    <result column="mark" property="mark"/>
+  </resultMap>
+
+
+
+  <resultMap id="BaseResultMap" type="cn.bupt.qoe.model.DetectData" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="mac" property="mac" />
+    <result column="cpu" property="cpu"  />
+    <result column="screenPixels" property="screenPixels"  />
+    <result column="mimeType" property="mimeType"  />
+    <result column="height" property="height"  />
+    <result column="width" property="width"  />
+    <result column="videoStreamBitRate" property="videoStreamBitRate"  />
+    <result column="videoLength" property="videoLength" />
+    <result column="initTime" property="initTime"  />
+    <result column="videoBufferStart" property="videoBufferStart"  />
+    <result column="mark" property="mark"  />
+    <collection property="test" column="mark" ofType="cn.bupt.qoe.model.TestData" select="getTest"/>
+    <collection property="monitor" column="mark" ofType="cn.bupt.qoe.model.MonitorData" select="getMonitor"/>
+  </resultMap>
+
+  <select id="getTest" parameterType="java.lang.String" resultMap="testDataMap">
+    select * from newapp_metadata_test where mark=#{mark}
+  </select>
+  <select id="getMonitor" parameterType="java.lang.String" resultMap="monitorDataMap">
+    select * from newapp_metadata_monitor where mark=#{mark}
+  </select>
+  <select id="getOneDetectDataByMark" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from newapp_metadata_static where mark=#{mark}
+ </select>
+
+  <select id="getAllDetectData" resultMap="BaseResultMap">
+    select * from newapp_metadata_static
+  </select>
+
+
+
+
   <sql id="Base_Column_List" >
-    result_id, cpu, memory_consumption, screen_pixels, video_stream_bitRate, throughput, 
-    init_buffer, reserved_buffer, video_length, message_delay, latitude, longitude, mos_obj, 
+    result_id, cpu, memory_consumption, screen_pixels, video_stream_bitRate, throughput,
+    init_buffer, reserved_buffer, video_length, message_delay, latitude, longitude, mos_obj,
     mos_sub, detect_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >

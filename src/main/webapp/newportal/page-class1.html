@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-	<title>QoE用户体验质量</title>
+	<title>移动视频业务QoE评测系统</title>
 	<meta charset="utf-8">
 	<link rel="icon" href="https://static.jianshukeji.com/highcharts/images/favicon.ico">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -36,6 +36,18 @@
 	<script src="assets/vendor/bootstrap/js/bootstrap-table.js"></script>
 
 	<script type="application/javascript">
+        $.ajax({
+            url:"http://localhost:8080/api/high/stastic",
+            dataType:"json",
+            type:"GET",
+            success:function(response){
+                var data = response.data;
+                $("#test-num").html(data[0])
+				$("#mac-num").html(data[1])
+            }
+        });
+	</script>
+	<script type="application/javascript">
         Date.prototype.Format = function (fmt) { //author: meizz
             var o = {
                 "M+": this.getMonth() + 1, //月份
@@ -52,151 +64,6 @@
             return fmt;
         }
 	</script>
-    <script type="application/javascript">
-        $(document).ready(function() {
-            loadDetectResultPage(1, 5);
-        });
-
-        function loadDetectResultPage(currentPage, limit) {
-            //先销毁表格
-            $('#table').bootstrapTable('destroy');
-            //var queryTableName=$('#keyword').val();
-            $("#table").bootstrapTable({
-                method: "post",  //使用get请求到服务器获取数据
-                contentType: "application/x-www-form-urlencoded",
-                dataType: "json",
-                url: 'http://localhost:58080/qoe/api/detect/detail', //获取数据的Servlet地址
-                striped: true,  //表格显示条纹
-                pagination: true, //启动分页
-                pageSize: limit,  //每页显示的记录数
-                pageNumber:currentPage, //当前第几页
-                pageList: [5, 10, 15, 20, 25],  //记录数可选列表
-                search: false,  //是否启用查询
-                sidePagination: "server", //表示服务端请求
-                clickToSelect: true,
-                undefinedText:'',
-                //设置为undefined可以获取pageNumber，pageSize，searchText，sortName，sortOrder
-                //设置为limit可以获取limit, offset, search, sort, order
-                queryParamsType : "undefined",
-                queryParams: function queryParams(params) {   //设置查询参数
-                    var param = {
-                        pageSize: params.pageNumber,
-                        pageNumber: params.pageSize
-                    };
-                    return param;
-                },
-                onLoadSuccess: function(data){  
-                	console.log("data: "+data);
-                	//加载成功时执行
-                },
-                onLoadError: function(){  //加载失败时执行
-                    bootbox.alert("加载数据失败");
-                },
-                columns: [{
-                    checkbox: true
-                }, {
-                    field: 'resultId',
-                    title: 'ID',
-                    valign: 'middle',
-                    align: 'center',
-                    order:'asc'
-                }, {
-                    field: 'cpu',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '主频/KHz'
-                }, {
-                    field: 'memoryConsumption',
-                    class:"hidden",
-                    title: '内存消耗/%'
-                },{
-                    field: 'screenPixels',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '像素/ppi',
-                },{
-                    field: 'videoStreamBitrate',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '码率/kbps',
-                },{
-                    field: 'throughput',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '吞吐量/kbps',
-                },{
-                    field: 'initBuffer',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '初始缓冲区/s',
-                },{
-                    field: 'reservedBuffer',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '预留缓冲区/s',
-                },{
-                    field: 'videoLength',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '视频长度/s',
-                },{
-                    field: 'messageDelay',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '消息时延/ms',
-                },{
-                    field: 'latitude',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '纬度',
-                },{
-                    field: 'longitude',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '经度',
-                },{
-                    field: 'detectTime',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '测试时间',
-                    formatter: function (value, row, index) {
-                        if(value!=null){
-                            return new Date(parseInt(value)).Format('yyyy-MM-dd HH:mm:ss');
-                        }
-                        return "无";
-                    }
-                },
-                {
-                    field: 'mosObj',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '客观mos',
-                },
-                {
-                    field: 'mosSub',
-                    valign: 'middle',
-                    align: 'center',
-                    title: '主观mos',
-                }],
-                responseHandler : function(res) {
-                    $('#currentPage').val(currentPage);
-                    $('#limit').val(limit);
-                    if(res.total > 0) {
-                        return {
-                            "rows": res.rows,
-                            "total": res.total
-                        }
-                    } else {
-                        return {
-                            "rows": [],
-                            "total": 0
-                        }
-                    }
-                },
-            });
-        }
-
-    </script>
 </head>
 
 <body>
@@ -204,8 +71,8 @@
 	<div id="wrapper">
 		<!-- NAVBAR -->
 		<nav class="navbar navbar-default navbar-fixed-top">
-			<div class="brand">
-				<a href="index.html"/><span class="span-wangjian">用户体验质量QoE</span>
+			<div class="brand" style="width: 500px;">
+				<a href="index.html"/><span class="span-wangjian" style="width:300px;">移动视频业务QoE评测系统</span>
 			</div>
 			<div class="container-fluid">
 
@@ -252,10 +119,8 @@
 							<a href="#subPages" data-toggle="collapse" class="active"><i class="lnr lnr-chart-bars"></i> <span>详情页</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
 							<div id="subPages" class="collapse in">
 								<ul class="nav">
-									<li><a href="page-class1.html" class="active">教一</a></li>
-									<li><a href="page-class2.html" class="">教二</a></li>
-									<li><a href="page-class3.html" class="">教三</a></li>
-									<li><a href="page-class4.html" class="">教四</a></li>
+									<li><a href="page-class1.html" class="active">数据总览</a></li>
+									<li><a href="page-class2.html" class="">区域详情</a></li>
 								</ul>
 							</div>
 						</li>
@@ -272,108 +137,22 @@
 				<div class="container-fluid">
 					<div class="panel panel-profile">
 						<div class="clearfix">
-							<h2 class="panel-title text-center">测试点详细信息</h2>
-                            <table id="table" class="table table-hover" data-show-refresh="false" data-show-toggle="false" data-show-columns="false" data-switchable="true" data-select-item-name="subBox" data-pagination="true" data-sort-order="desc"></table>
-							<div id="container-1" style="min-width:400px;height:400px"></div>
-							<script>
-                                $(function () {
-                                	//获取当前日期，并获取前七天的日期
-                                	var datesForshow = ["","","","","","",""];
-                                	var mydate = new Date();
-                                	mydate.setDate(mydate.getDate()-7);
-                                	//console.log(mydate.getMonth()+"月"+mydate.getDate()+"日");
-                                	for(var i=0;i<7;i++){
-                                		datesForshow[i] = mydate.getMonth()+1+"月"+mydate.getDate()+"日";
-                                		console.log(datesForshow[i]);
-                                		mydate.setDate(mydate.getDate()+1);
-                                	}
-                                	
-                                    $('#container-1').highcharts({
-                                        chart: {
-                                            type: 'line'
-                                        },
-                                        title: {
-                                            text: 'QoE指数时间分布'
-                                        },
-                                        subtitle: {
-                                            text: '数据来源: Lab640'
-                                        },
-                                        xAxis: {
-                                            categories: datesForshow
-                                        },
-                                        yAxis: {
-                                            title: {
-                                                text: 'QoE指数 (单位:1)'
-                                            }
-                                        },
-                                        plotOptions: {
-                                            line: {
-                                                dataLabels: {
-                                                    enabled: true          // 开启数据标签
-                                                },
-                                                enableMouseTracking: false // 关闭鼠标跟踪，对应的提示框、点击事件会失效
-                                            }
-                                        },
-                                        series: [{
-                                            name: '平均值',
-                                            data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2]
-                                        }, {
-                                            name: '标准差',
-                                            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0]
-                                        }]
-                                    });
-                                });
-
-							</script>
-							<div id="container-2" style="min-width:400px;max-width: 600px;height:400px;margin: 0 auto"></div>
-							<script>
-                                $(function () {
-                                    $('#container-2').highcharts({
-                                        chart: {
-                                            polar: true,
-                                            type: 'line'
-                                        },
-                                        title: {
-                                            text: '测量KPI参数详细',
-                                            x: -80
-                                        },
-                                        pane: {
-                                            size: '80%'
-                                        },
-                                        xAxis: {
-                                            categories: ['cpu', '内存消耗量', '屏幕像素密度', '视频流平均比特率',
-                                                '吞吐量', '视频长度'],
-                                            tickmarkPlacement: 'on',
-                                            lineWidth: 0
-                                        },
-                                        yAxis: {
-                                            gridLineInterpolation: 'polygon',
-                                            lineWidth: 0,
-                                            min: 0
-                                        },
-                                        tooltip: {
-                                            shared: true,
-                                            pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>'
-                                        },
-                                        legend: {
-                                            align: 'right',
-                                            verticalAlign: 'top',
-                                            y: 70,
-                                            layout: 'vertical'
-                                        },
-                                        series: [{
-                                            name: 'KPI测量值',
-                                            data: [43, 19, 60, 35, 17, 10],
-                                            pointPlacement: 'on'
-                                        }, {
-                                            name: '经过KCM算法归一化后的值',
-                                            data: [5, 39, 42, 31, 26, 14],
-                                            pointPlacement: 'on'
-                                        }]
-                                    });
-                                });
-
-							</script>
+							<div id="top-container" style="width:100%;height:80px;">
+								<h1 style="align:center;text-align:center;font-family:Microsoft YaHei;">OverView</h1>
+							</div>
+							<div id="num-container" style="width:100%;height: 120px;float:left">
+								<div class="intop-1" style="width:50%;height:100%;float:left">
+									<button type="button" class="btn btn-primary btn-toastr" data-context="info" data-message="This is general theme info" data-position="top-right" style="margin-left: 35%;">总监测次数</button>
+									<h1 id="test-num" style="align:center;text-align:center;font-family:Microsoft YaHei;font-size: 60px;">0</h1>
+								</div>
+								<div class="intop-2" style="width:50%;height:100%;float:left">
+									<button type="button" class="btn btn-success btn-toastr" data-context="success" data-message="This is success info" data-position="top-right" style="margin-left: 35%;">总监测用户数</button>
+									<h1 id="mac-num" style="align:center;text-align:center;font-family:Microsoft YaHei;font-size: 60px;">0</h1>
+								</div>
+							</div>
+							<div id="lib-container" style="width:100%;height: 20px;float:left;"></div>
+							<div id="main-container" style="width:100%;height: 400px;float:left"></div>
+							<div id="area-container" style="width:100%;height: 500px;float:left"></div>
 						</div>
 					</div>
 				</div>
@@ -390,6 +169,178 @@
 	</div>
 	<!-- END WRAPPER -->
 
+	<!-- HighCharts -->
+	<script>
+        $(function () {
+            var chart = new Highcharts.Chart({
+//            $('#main-container').highcharts({
+                chart: {
+                    renderTo : 'main-container',
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                },
+                title: {
+                    text: '用户主观Mos值占比'
+                },
+                tooltip: {
+                    headerFormat: '{series.name}<br>',
+                    pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
+                },
+				color:[
+                    '#8B1A1A',
+					'#DC143C',
+					'#836FFF',
+					'#4A708B',
+					'#43CD80'
+				],
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+							color:'#000000',
+							connectorColor:'#000000'
+                        }
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: '用户打分占比',
+                    data: [
+                        ['1分',10],
+                        ['2分',10],
+                        ['3分',10],
+                        ['4分',10],
+                        {
+                            name: '5分',
+                            y: 60,
+                            sliced: true,
+                            selected: true
+                        }
+                    ]
+                }]
+            });
+            $.ajax({
+                url:"http://localhost:8080/api/high/main",
+                dataType:"json",
+                type:"GET",
+                success:function(response){
+                    var data = response.data;
+                    console.info(data.mos1);
+                    var arr = new Array();
+                    var value1 = ['1分', data.mos1]
+					var value2 = ['2分', data.mos2]
+                    var value3 = ['3分', data.mos3]
+                    var value4 = ['4分', data.mos4]
+                    var value5 = ['5分', data.mos5]
+					arr.push(value1)
+                    arr.push(value2)
+                    arr.push(value3)
+                    arr.push(value4)
+                    arr.push(value5)
+					chart.series[0].setData(arr)
+                }
+            });
+        });
+
+	</script>
+	<script>
+        $(function () {
+            var area_chart = new Highcharts.Chart({
+//            $('#time-container').highcharts({
+                chart: {
+                    renderTo: 'area-container',
+                    zoomType: 'xy'
+                },
+                title: {
+                    text: '各个区域的Mos平均值和方差对比图'
+                },
+                subtitle: {
+                    text: 'QoE平台'
+                },
+                xAxis: [{
+                    categories: [],
+                    crosshair: true,
+                    style: {
+                        color: Highcharts.getOptions().colors[2]
+                    }
+                }],
+                yAxis: [{ // Primary yAxis
+                    labels: {
+                        format: '{value} ',
+                        style: {
+                            color: Highcharts.getOptions().colors[2]
+                        }
+                    },
+                    title: {
+                        text: '方差值',
+                        style: {
+                            color: Highcharts.getOptions().colors[2]
+                        }
+                    },
+                    opposite: true
+                }, { // Secondary yAxis
+                    gridLineWidth: 0,
+                    title: {
+                        text: 'Mos值',
+                        style: {
+                            color: Highcharts.getOptions().colors[2]
+                        }
+                    },
+                    labels: {
+                        format: '{value}',
+                        style: {
+                            color: Highcharts.getOptions().colors[2]
+                        }
+                    }
+                }],
+                tooltip: {
+                    shared: true
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'left',
+                    x: 80,
+                    verticalAlign: 'top',
+                    y: 55,
+                    floating: true,
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+                },
+                series: [{
+                    name: '平均Mos值',
+                    type: 'spline',
+                    yAxis: 1,
+                    data: [],
+                    tooltip: {
+                        valueSuffix: ' '
+                    }
+                }, {
+                    name: '方差值',
+                    type: 'spline',
+                    data: [],
+                    tooltip: {
+                        valueSuffix: ' '
+                    }
+                }]
+            });
+            $.ajax({
+                url:"http://localhost:8080/api/high/area",
+                dataType:"json",
+                type:"GET",
+                success:function(response){
+                    var data = response.data;
+                    area_chart.xAxis[0].categories = data.categories
+                    area_chart.series[0].setData(data.avgList)
+                    area_chart.series[1].setData(data.varianceList)
+                }
+            });
+        });
+
+
+	</script>
 </body>
 
 </html>
