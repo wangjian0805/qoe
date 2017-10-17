@@ -1,176 +1,186 @@
 package cn.bupt.qoe.model;
 
-import java.util.Date;
+import java.util.List;
 
 public class DetectData {
-    private Long resultId;
+	private Long id;
+	private String mac;
+	private Double cpu;
+	private Integer screenPixels;
+	private String mimeType;
+	private Integer height;
+	private Integer width;
+	private Double videoStreamBitRate;
+	private Integer videoLength;
+	private Long initTime;
+	private Long videoBufferStart;
+	private int stopNum;
+	private long stopTimeAvg;
+	private double mosOverall;
+	private List<TestData> test;
+	private List<MonitorData> monitor;
+	private String mark;
 
-    private Integer cpu;
+	public StaticData getStaticData() {
+		StaticData sd;
+		sd = new StaticData(mac, cpu, screenPixels, mimeType, height, width, videoStreamBitRate, videoLength, initTime,
+				videoBufferStart, stopNum,stopTimeAvg,mosOverall,mark);
+		return sd;
+	}
 
-    private Integer memoryConsumption;
+	
+	public int getStopNum() {
+		return stopNum;
+	}
 
-    private Integer screenPixels;
 
-    private Integer videoStreamBitrate;
+	public void setStopNum(int stopNum) {
+		this.stopNum = stopNum;
+	}
 
-    private Integer throughput;
 
-    private Double initBuffer;
+	public long getStopTimeAvg() {
+		return stopTimeAvg;
+	}
 
-    private Double reservedBuffer;
 
-    private Integer videoLength;
+	public void setStopTimeAvg(long stopTimeAvg) {
+		this.stopTimeAvg = stopTimeAvg;
+	}
 
-    private Integer messageDelay;
 
-    private Double latitude;
+	public double getMosOverall() {
+		return mosOverall;
+	}
 
-    private Double longitude;
 
-    private Double mosObj;
+	public void setMosOverall(double mosOverall) {
+		this.mosOverall = mosOverall;
+	}
 
-    private Double mosSub;
 
-    private Date detectTime;
+	public Long getId() {
+		return id;
+	}
 
-    public Long getResultId() {
-        return resultId;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setResultId(Long resultId) {
-        this.resultId = resultId;
-    }
+	public String getMac() {
+		return mac;
+	}
 
-    public Integer getCpu() {
-        return cpu;
-    }
+	public void setMac(String mac) {
+		this.mac = mac;
+	}
 
-    public void setCpu(Integer cpu) {
-        this.cpu = cpu;
-    }
+	public Double getCpu() {
+		return cpu;
+	}
 
-    public Integer getMemoryConsumption() {
-        return memoryConsumption;
-    }
+	public void setCpu(Double cpu) {
+		this.cpu = cpu;
+	}
 
-    public void setMemoryConsumption(Integer memoryConsumption) {
-        this.memoryConsumption = memoryConsumption;
-    }
+	public Integer getScreenPixels() {
+		return screenPixels;
+	}
 
-    public Integer getScreenPixels() {
-        return screenPixels;
-    }
+	public void setScreenPixels(Integer screenPixels) {
+		this.screenPixels = screenPixels;
+	}
 
-    public void setScreenPixels(Integer screenPixels) {
-        this.screenPixels = screenPixels;
-    }
+	public String getMimeType() {
+		return mimeType;
+	}
 
-    public Integer getVideoStreamBitrate() {
-        return videoStreamBitrate;
-    }
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
+	}
 
-    public void setVideoStreamBitrate(Integer videoStreamBitrate) {
-        this.videoStreamBitrate = videoStreamBitrate;
-    }
+	public Integer getHeight() {
+		return height;
+	}
 
-    public Integer getThroughput() {
-        return throughput;
-    }
+	public void setHeight(Integer height) {
+		this.height = height;
+	}
 
-    public void setThroughput(Integer throughput) {
-        this.throughput = throughput;
-    }
+	public Integer getWidth() {
+		return width;
+	}
 
-    public Double getInitBuffer() {
-        return initBuffer;
-    }
+	public void setWidth(Integer width) {
+		this.width = width;
+	}
 
-    public void setInitBuffer(Double initBuffer) {
-        this.initBuffer = initBuffer;
-    }
+	public Double getVideoStreamBitRate() {
+		return videoStreamBitRate;
+	}
 
-    public Double getReservedBuffer() {
-        return reservedBuffer;
-    }
+	public void setVideoStreamBitRate(Double videoStreamBitRate) {
+		this.videoStreamBitRate = videoStreamBitRate;
+	}
 
-    public void setReservedBuffer(Double reservedBuffer) {
-        this.reservedBuffer = reservedBuffer;
-    }
+	public Integer getVideoLength() {
+		return videoLength;
+	}
 
-    public Integer getVideoLength() {
-        return videoLength;
-    }
+	public void setVideoLength(Integer videoLength) {
+		this.videoLength = videoLength;
+	}
 
-    public void setVideoLength(Integer videoLength) {
-        this.videoLength = videoLength;
-    }
+	public Long getInitTime() {
+		return initTime;
+	}
 
-    public Integer getMessageDelay() {
-        return messageDelay;
-    }
+	public void setInitTime(Long initTime) {
+		this.initTime = initTime;
+	}
 
-    public void setMessageDelay(Integer messageDelay) {
-        this.messageDelay = messageDelay;
-    }
+	public Long getVideoBufferStart() {
+		return videoBufferStart;
+	}
 
-    public Double getLatitude() {
-        return latitude;
-    }
+	public void setVideoBufferStart(Long videoBufferStart) {
+		this.videoBufferStart = videoBufferStart;
+	}
 
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
+	public List<TestData> getTest() {
+		return test;
+	}
 
-    public Double getLongitude() {
-        return longitude;
-    }
+	public void setTest(List<TestData> testList) {
+		this.test = testList;
+	}
 
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
+	public List<MonitorData> getMonitor() {
+		return monitor;
+	}
 
-    public Date getDetectTime() {
-        return detectTime;
-    }
+	public void setMonitor(List<MonitorData> monitorList) {
+		this.monitor = monitorList;
+	}
 
-    public void setDetectTime(Date detectTime) {
-        this.detectTime = detectTime;
-    }
+	public String getMark() {
+		return mark;
+	}
 
-    public Double getMosObj() {
-        return mosObj;
-    }
+	public void setMark(String mark) {
+		this.mark = mark;
+	}
 
-    public void setMosObj(Double mosObj) {
-        this.mosObj = mosObj;
-    }
 
-    public Double getMosSub() {
-        return mosSub;
-    }
+	@Override
+	public String toString() {
+		return "DetectData [id=" + id + ", mac=" + mac + ", cpu=" + cpu + ", screenPixels=" + screenPixels
+				+ ", mimeType=" + mimeType + ", height=" + height + ", width=" + width + ", videoStreamBitRate="
+				+ videoStreamBitRate + ", videoLength=" + videoLength + ", initTime=" + initTime + ", videoBufferStart="
+				+ videoBufferStart + ", stopNum=" + stopNum + ", stopTimeAvg=" + stopTimeAvg + ", mosOverall="
+				+ mosOverall + ", test=" + test + ", monitor=" + monitor + ", mark=" + mark + "]";
+	}
 
-    public void setMosSub(Double mosSub) {
-        this.mosSub = mosSub;
-    }
+	
 
-    @Override
-    public String toString() {
-        return "DetectData{" +
-                "resultId=" + resultId +
-                ", cpu=" + cpu +
-                ", memoryConsumption=" + memoryConsumption +
-                ", screenPixels=" + screenPixels +
-                ", videoStreamBitrate=" + videoStreamBitrate +
-                ", throughput=" + throughput +
-                ", initBuffer=" + initBuffer +
-                ", reservedBuffer=" + reservedBuffer +
-                ", videoLength=" + videoLength +
-                ", messageDelay=" + messageDelay +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                ", mosObj=" + mosObj +
-                ", mosSub=" + mosSub +
-                ", detectTime=" + detectTime +
-                '}';
-    }
 }

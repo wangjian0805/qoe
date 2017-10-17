@@ -1,223 +1,262 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="cn.bupt.qoe.mapper.DetectDataMapper" >
-  <resultMap id="BaseResultMap" type="cn.bupt.qoe.model.DetectData" >
-    <id column="result_id" property="resultId" jdbcType="BIGINT" />
-    <result column="cpu" property="cpu" jdbcType="INTEGER" />
-    <result column="memory_consumption" property="memoryConsumption" jdbcType="INTEGER" />
-    <result column="screen_pixels" property="screenPixels" jdbcType="INTEGER" />
-    <result column="video_stream_bitRate" property="videoStreamBitrate" jdbcType="INTEGER" />
-    <result column="throughput" property="throughput" jdbcType="INTEGER" />
-    <result column="init_buffer" property="initBuffer" jdbcType="DOUBLE" />
-    <result column="reserved_buffer" property="reservedBuffer" jdbcType="DOUBLE" />
-    <result column="video_length" property="videoLength" jdbcType="INTEGER" />
-    <result column="message_delay" property="messageDelay" jdbcType="INTEGER" />
-    <result column="latitude" property="latitude" jdbcType="DOUBLE" />
-    <result column="longitude" property="longitude" jdbcType="DOUBLE" />
-    <result column="mos_obj" property="mosObj" jdbcType="DOUBLE" />
-    <result column="mos_sub" property="mosSub" jdbcType="DOUBLE" />
-    <result column="detect_time" property="detectTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    result_id, cpu, memory_consumption, screen_pixels, video_stream_bitRate, throughput, 
-    init_buffer, reserved_buffer, video_length, message_delay, latitude, longitude, mos_obj, 
-    mos_sub, detect_time
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from qoe_mos
-    where result_id = #{resultId,jdbcType=BIGINT}
-  </select>
-  <select id="selectAll" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from qoe_mos
-  </select>
-  <select id="selectAllByPage" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from qoe_mos
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from qoe_mos
-    where result_id = #{resultId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="cn.bupt.qoe.model.DetectData" >
-    insert into qoe_mos (result_id, cpu, memory_consumption, 
-      screen_pixels, video_stream_bitRate, throughput, 
-      init_buffer, reserved_buffer, video_length, 
-      message_delay, latitude, longitude, 
-      mos_obj, mos_sub, detect_time
-      )
-    values (#{resultId,jdbcType=BIGINT}, #{cpu,jdbcType=INTEGER}, #{memoryConsumption,jdbcType=INTEGER}, 
-      #{screenPixels,jdbcType=INTEGER}, #{videoStreamBitrate,jdbcType=INTEGER}, #{throughput,jdbcType=INTEGER}, 
-      #{initBuffer,jdbcType=DOUBLE}, #{reservedBuffer,jdbcType=DOUBLE}, #{videoLength,jdbcType=INTEGER}, 
-      #{messageDelay,jdbcType=INTEGER}, #{latitude,jdbcType=DOUBLE}, #{longitude,jdbcType=DOUBLE}, 
-      #{mosObj,jdbcType=DOUBLE}, #{mosSub,jdbcType=DOUBLE}, #{detectTime,jdbcType=TIMESTAMP}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="cn.bupt.qoe.model.DetectData" >
-    insert into qoe_mos
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="resultId != null" >
-        result_id,
-      </if>
-      <if test="cpu != null" >
-        cpu,
-      </if>
-      <if test="memoryConsumption != null" >
-        memory_consumption,
-      </if>
-      <if test="screenPixels != null" >
-        screen_pixels,
-      </if>
-      <if test="videoStreamBitrate != null" >
-        video_stream_bitRate,
-      </if>
-      <if test="throughput != null" >
-        throughput,
-      </if>
-      <if test="initBuffer != null" >
-        init_buffer,
-      </if>
-      <if test="reservedBuffer != null" >
-        reserved_buffer,
-      </if>
-      <if test="videoLength != null" >
-        video_length,
-      </if>
-      <if test="messageDelay != null" >
-        message_delay,
-      </if>
-      <if test="latitude != null" >
-        latitude,
-      </if>
-      <if test="longitude != null" >
-        longitude,
-      </if>
-      <if test="mosObj != null" >
-        mos_obj,
-      </if>
-      <if test="mosSub != null" >
-        mos_sub,
-      </if>
-      <if test="detectTime != null" >
-        detect_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="resultId != null" >
-        #{resultId,jdbcType=BIGINT},
-      </if>
-      <if test="cpu != null" >
-        #{cpu,jdbcType=INTEGER},
-      </if>
-      <if test="memoryConsumption != null" >
-        #{memoryConsumption,jdbcType=INTEGER},
-      </if>
-      <if test="screenPixels != null" >
-        #{screenPixels,jdbcType=INTEGER},
-      </if>
-      <if test="videoStreamBitrate != null" >
-        #{videoStreamBitrate,jdbcType=INTEGER},
-      </if>
-      <if test="throughput != null" >
-        #{throughput,jdbcType=INTEGER},
-      </if>
-      <if test="initBuffer != null" >
-        #{initBuffer,jdbcType=DOUBLE},
-      </if>
-      <if test="reservedBuffer != null" >
-        #{reservedBuffer,jdbcType=DOUBLE},
-      </if>
-      <if test="videoLength != null" >
-        #{videoLength,jdbcType=INTEGER},
-      </if>
-      <if test="messageDelay != null" >
-        #{messageDelay,jdbcType=INTEGER},
-      </if>
-      <if test="latitude != null" >
-        #{latitude,jdbcType=DOUBLE},
-      </if>
-      <if test="longitude != null" >
-        #{longitude,jdbcType=DOUBLE},
-      </if>
-      <if test="mosObj != null" >
-        #{mosObj,jdbcType=DOUBLE},
-      </if>
-      <if test="mosSub != null" >
-        #{mosSub,jdbcType=DOUBLE},
-      </if>
-      <if test="detectTime != null" >
-        #{detectTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.bupt.qoe.model.DetectData" >
-    update qoe_mos
-    <set >
-      <if test="cpu != null" >
-        cpu = #{cpu,jdbcType=INTEGER},
-      </if>
-      <if test="memoryConsumption != null" >
-        memory_consumption = #{memoryConsumption,jdbcType=INTEGER},
-      </if>
-      <if test="screenPixels != null" >
-        screen_pixels = #{screenPixels,jdbcType=INTEGER},
-      </if>
-      <if test="videoStreamBitrate != null" >
-        video_stream_bitRate = #{videoStreamBitrate,jdbcType=INTEGER},
-      </if>
-      <if test="throughput != null" >
-        throughput = #{throughput,jdbcType=INTEGER},
-      </if>
-      <if test="initBuffer != null" >
-        init_buffer = #{initBuffer,jdbcType=DOUBLE},
-      </if>
-      <if test="reservedBuffer != null" >
-        reserved_buffer = #{reservedBuffer,jdbcType=DOUBLE},
-      </if>
-      <if test="videoLength != null" >
-        video_length = #{videoLength,jdbcType=INTEGER},
-      </if>
-      <if test="messageDelay != null" >
-        message_delay = #{messageDelay,jdbcType=INTEGER},
-      </if>
-      <if test="latitude != null" >
-        latitude = #{latitude,jdbcType=DOUBLE},
-      </if>
-      <if test="longitude != null" >
-        longitude = #{longitude,jdbcType=DOUBLE},
-      </if>
-      <if test="mosObj != null" >
-        mos_obj = #{mosObj,jdbcType=DOUBLE},
-      </if>
-      <if test="mosSub != null" >
-        mos_sub = #{mosSub,jdbcType=DOUBLE},
-      </if>
-      <if test="detectTime != null" >
-        detect_time = #{detectTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where result_id = #{resultId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="cn.bupt.qoe.model.DetectData" >
-    update qoe_mos
-    set cpu = #{cpu,jdbcType=INTEGER},
-      memory_consumption = #{memoryConsumption,jdbcType=INTEGER},
-      screen_pixels = #{screenPixels,jdbcType=INTEGER},
-      video_stream_bitRate = #{videoStreamBitrate,jdbcType=INTEGER},
-      throughput = #{throughput,jdbcType=INTEGER},
-      init_buffer = #{initBuffer,jdbcType=DOUBLE},
-      reserved_buffer = #{reservedBuffer,jdbcType=DOUBLE},
-      video_length = #{videoLength,jdbcType=INTEGER},
-      message_delay = #{messageDelay,jdbcType=INTEGER},
-      latitude = #{latitude,jdbcType=DOUBLE},
-      longitude = #{longitude,jdbcType=DOUBLE},
-      mos_obj = #{mosObj,jdbcType=DOUBLE},
-      mos_sub = #{mosSub,jdbcType=DOUBLE},
-      detect_time = #{detectTime,jdbcType=TIMESTAMP}
-    where result_id = #{resultId,jdbcType=BIGINT}
-  </update>
+<mapper namespace="cn.bupt.qoe.mapper.DetectDataMapper">
+	<resultMap id="BaseResultMap" type="cn.bupt.qoe.model.DetectData">
+		<id column="result_id" property="resultId" jdbcType="BIGINT" />
+		<result column="cpu" property="cpu" jdbcType="INTEGER" />
+		<result column="memory_consumption" property="memoryConsumption"
+			jdbcType="INTEGER" />
+		<result column="screen_pixels" property="screenPixels"
+			jdbcType="INTEGER" />
+		<result column="video_stream_bitRate" property="videoStreamBitrate"
+			jdbcType="INTEGER" />
+		<result column="throughput" property="throughput" jdbcType="INTEGER" />
+		<result column="init_buffer" property="initBuffer" jdbcType="DOUBLE" />
+		<result column="reserved_buffer" property="reservedBuffer"
+			jdbcType="DOUBLE" />
+		<result column="video_length" property="videoLength" jdbcType="INTEGER" />
+		<result column="message_delay" property="messageDelay"
+			jdbcType="INTEGER" />
+		<result column="latitude" property="latitude" jdbcType="DOUBLE" />
+		<result column="longitude" property="longitude" jdbcType="DOUBLE" />
+		<result column="mos_obj" property="mosObj" jdbcType="DOUBLE" />
+		<result column="mos_sub" property="mosSub" jdbcType="DOUBLE" />
+		<result column="detect_time" property="detectTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		result_id, cpu, memory_consumption, screen_pixels,
+		video_stream_bitRate,
+		throughput,
+		init_buffer, reserved_buffer,
+		video_length, message_delay, latitude, longitude,
+		mos_obj,
+		mos_sub,
+		detect_time
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from qoe_mos
+		where result_id = #{resultId,jdbcType=BIGINT}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from qoe_mos
+	</select>
+	<select id="selectAllByPage" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from qoe_mos
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		qoe_mos
+		where result_id = #{resultId,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="cn.bupt.qoe.model.DetectData">
+		insert into qoe_mos
+		(result_id, cpu, memory_consumption,
+		screen_pixels,
+		video_stream_bitRate, throughput,
+		init_buffer, reserved_buffer,
+		video_length,
+		message_delay, latitude, longitude,
+		mos_obj, mos_sub,
+		detect_time
+		)
+		values (#{resultId,jdbcType=BIGINT},
+		#{cpu,jdbcType=INTEGER},
+		#{memoryConsumption,jdbcType=INTEGER},
+		#{screenPixels,jdbcType=INTEGER},
+		#{videoStreamBitrate,jdbcType=INTEGER},
+		#{throughput,jdbcType=INTEGER},
+		#{initBuffer,jdbcType=DOUBLE},
+		#{reservedBuffer,jdbcType=DOUBLE}, #{videoLength,jdbcType=INTEGER},
+		#{messageDelay,jdbcType=INTEGER}, #{latitude,jdbcType=DOUBLE},
+		#{longitude,jdbcType=DOUBLE},
+		#{mosObj,jdbcType=DOUBLE},
+		#{mosSub,jdbcType=DOUBLE}, #{detectTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="cn.bupt.qoe.model.DetectData">
+		insert into qoe_mos
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="resultId != null">
+				result_id,
+			</if>
+			<if test="cpu != null">
+				cpu,
+			</if>
+			<if test="memoryConsumption != null">
+				memory_consumption,
+			</if>
+			<if test="screenPixels != null">
+				screen_pixels,
+			</if>
+			<if test="videoStreamBitrate != null">
+				video_stream_bitRate,
+			</if>
+			<if test="throughput != null">
+				throughput,
+			</if>
+			<if test="initBuffer != null">
+				init_buffer,
+			</if>
+			<if test="reservedBuffer != null">
+				reserved_buffer,
+			</if>
+			<if test="videoLength != null">
+				video_length,
+			</if>
+			<if test="messageDelay != null">
+				message_delay,
+			</if>
+			<if test="latitude != null">
+				latitude,
+			</if>
+			<if test="longitude != null">
+				longitude,
+			</if>
+			<if test="mosObj != null">
+				mos_obj,
+			</if>
+			<if test="mosSub != null">
+				mos_sub,
+			</if>
+			<if test="detectTime != null">
+				detect_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="resultId != null">
+				#{resultId,jdbcType=BIGINT},
+			</if>
+			<if test="cpu != null">
+				#{cpu,jdbcType=INTEGER},
+			</if>
+			<if test="memoryConsumption != null">
+				#{memoryConsumption,jdbcType=INTEGER},
+			</if>
+			<if test="screenPixels != null">
+				#{screenPixels,jdbcType=INTEGER},
+			</if>
+			<if test="videoStreamBitrate != null">
+				#{videoStreamBitrate,jdbcType=INTEGER},
+			</if>
+			<if test="throughput != null">
+				#{throughput,jdbcType=INTEGER},
+			</if>
+			<if test="initBuffer != null">
+				#{initBuffer,jdbcType=DOUBLE},
+			</if>
+			<if test="reservedBuffer != null">
+				#{reservedBuffer,jdbcType=DOUBLE},
+			</if>
+			<if test="videoLength != null">
+				#{videoLength,jdbcType=INTEGER},
+			</if>
+			<if test="messageDelay != null">
+				#{messageDelay,jdbcType=INTEGER},
+			</if>
+			<if test="latitude != null">
+				#{latitude,jdbcType=DOUBLE},
+			</if>
+			<if test="longitude != null">
+				#{longitude,jdbcType=DOUBLE},
+			</if>
+			<if test="mosObj != null">
+				#{mosObj,jdbcType=DOUBLE},
+			</if>
+			<if test="mosSub != null">
+				#{mosSub,jdbcType=DOUBLE},
+			</if>
+			<if test="detectTime != null">
+				#{detectTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="cn.bupt.qoe.model.DetectData">
+		update qoe_mos
+		<set>
+			<if test="cpu != null">
+				cpu = #{cpu,jdbcType=INTEGER},
+			</if>
+			<if test="memoryConsumption != null">
+				memory_consumption =
+				#{memoryConsumption,jdbcType=INTEGER},
+			</if>
+			<if test="screenPixels != null">
+				screen_pixels = #{screenPixels,jdbcType=INTEGER},
+			</if>
+			<if test="videoStreamBitrate != null">
+				video_stream_bitRate =
+				#{videoStreamBitrate,jdbcType=INTEGER},
+			</if>
+			<if test="throughput != null">
+				throughput = #{throughput,jdbcType=INTEGER},
+			</if>
+			<if test="initBuffer != null">
+				init_buffer = #{initBuffer,jdbcType=DOUBLE},
+			</if>
+			<if test="reservedBuffer != null">
+				reserved_buffer = #{reservedBuffer,jdbcType=DOUBLE},
+			</if>
+			<if test="videoLength != null">
+				video_length = #{videoLength,jdbcType=INTEGER},
+			</if>
+			<if test="messageDelay != null">
+				message_delay = #{messageDelay,jdbcType=INTEGER},
+			</if>
+			<if test="latitude != null">
+				latitude = #{latitude,jdbcType=DOUBLE},
+			</if>
+			<if test="longitude != null">
+				longitude = #{longitude,jdbcType=DOUBLE},
+			</if>
+			<if test="mosObj != null">
+				mos_obj = #{mosObj,jdbcType=DOUBLE},
+			</if>
+			<if test="mosSub != null">
+				mos_sub = #{mosSub,jdbcType=DOUBLE},
+			</if>
+			<if test="detectTime != null">
+				detect_time = #{detectTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where result_id = #{resultId,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="cn.bupt.qoe.model.DetectData">
+		update qoe_mos
+		set
+		cpu = #{cpu,jdbcType=INTEGER},
+		memory_consumption =
+		#{memoryConsumption,jdbcType=INTEGER},
+		screen_pixels =
+		#{screenPixels,jdbcType=INTEGER},
+		video_stream_bitRate =
+		#{videoStreamBitrate,jdbcType=INTEGER},
+		throughput =
+		#{throughput,jdbcType=INTEGER},
+		init_buffer =
+		#{initBuffer,jdbcType=DOUBLE},
+		reserved_buffer =
+		#{reservedBuffer,jdbcType=DOUBLE},
+		video_length =
+		#{videoLength,jdbcType=INTEGER},
+		message_delay =
+		#{messageDelay,jdbcType=INTEGER},
+		latitude =
+		#{latitude,jdbcType=DOUBLE},
+		longitude = #{longitude,jdbcType=DOUBLE},
+		mos_obj = #{mosObj,jdbcType=DOUBLE},
+		mos_sub =
+		#{mosSub,jdbcType=DOUBLE},
+		detect_time =
+		#{detectTime,jdbcType=TIMESTAMP}
+		where result_id =
+		#{resultId,jdbcType=BIGINT}
+	</update>
 </mapper>
