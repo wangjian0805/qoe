@@ -8,8 +8,16 @@ public class MonitorData {
 	private Integer netSpeed;
 	private Integer bufferPercentage;
 	private Double memoryConsumption;
+	private Double currentCpu;
 	private String mark;
 	
+	
+	public Double getCurrentCpu() {
+		return currentCpu;
+	}
+	public void setCurrentCpu(Double currentCpu) {
+		this.currentCpu = currentCpu;
+	}
 	public Long getId() {
 		return id;
 	}
