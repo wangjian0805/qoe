@@ -1,0 +1,38 @@
+ul.pagination>li>span,ul.pagination>li>a,ul.pagination>li.active>a,ul.pager>li>span
+{
+    cursor: pointer;
+}
+.pagination {
+    width: 1000px;
+    margin: 0 auto;
+}
+
+.pagination2 {
+    margin: 0 auto;
+}
+
+.pagination li {
+    float: left;
+    border-radius:50%;
+}
+.commonPage img {
+    cursor: pointer;
+    display: inline;
+    margin: 0 6px;
+}
+li.commonPage{
+    display:block;
+    -webkit-transition:1s;
+    transition:1s;
+}
+li.commonPage:hover {
+    -webkit-transform:scale(1.2);
+    cursor:pointer;
+    -moz-transform:scale(1.2);
+}
+.buildingName {
+    color: #fff;
+    padding-top: 6px;
+    font-size: 0.8em;
+    text-align:center
+}

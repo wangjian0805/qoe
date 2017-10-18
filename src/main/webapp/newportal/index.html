@@ -65,7 +65,7 @@
             heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":30,"blur":1,"gradient":{0.2:'#33FF33',0.4:'#99FF1A',0.6:'#FFFF00',0.8:'#FF8000',1:'#FF0000'}});
             map.addOverlay(heatmapOverlay);
             $.ajax({
-                url:"http://localhost:8080/api/high/map",
+                url:"http://localhost:8080/qoe/api/high/map",
                 dataType:"json",
                 type:"GET",
                 success:function(response){
@@ -111,7 +111,7 @@
                 console.info("点击的这个点是"+mac_time)
                 document.getElementById("index-title").innerHTML = "本次测量获取参数的详细展示";
                 $("#baidumap").hide();
-                var remoteUrl = "http://localhost:8080/api/high/detail?mark="+mac_time;
+                var remoteUrl = "http://localhost:8080/qoe/api/high/detail?mark="+mac_time;
                 $.ajax({
                     url:remoteUrl,
                     dataType:"json",

@@ -28,6 +28,7 @@ public class HighChartsController {
     @Autowired
     DetectDataMapper detectDataMapper;
 
+
     @RequestMapping("/osCompare")
     @ResponseBody//对象变json
     public WebResult getMapData(){
@@ -39,6 +40,47 @@ public class HighChartsController {
         List<Double> subList = new ArrayList<>();
         int i = 1;
         for(OsCompareModel os : dataList){
+            xList.add(i++);
+            subList.add(os.getSub());
+            objList.add(os.getObj());
+        }
+        list.add(xList);
+        list.add(subList);
+        list.add(objList);
+        result.setData(list);
+        return result;
+    }
+    @RequestMapping("/osCompareByBuilding")
+    @ResponseBody//对象变json
+    public WebResult getBuildingData(@RequestParam(value = "building", required = true) String building){
+        WebResult result = new WebResult();
+        List<BuildingModel> buildingMes = highChartsMapper.getBuildingMes();
+        List<DetectData> allData = detectDataMapper.getAllDetectData();
+        for(DetectData data : allData){
+            addToCorrectLocation(data,buildingMes);
+        }
+
+        List<DetectData> detectDataList = new ArrayList<>();
+        for(BuildingModel model:buildingMes){
+            if(building.equals(model.getBuilding())){
+                detectDataList = model.getDataList();
+            }
+        }
+        List<OsCompareModel> osDataList = new ArrayList<>();
+        for(DetectData data:detectDataList){
+            for(TestData test:data.getTest()){
+                OsCompareModel os = new OsCompareModel();
+                os.setObj(test.getMos_obj());
+                os.setSub(test.getMos_sub());
+                osDataList.add(os);
+            }
+        }
+        List<List> list = new ArrayList<>();
+        List<Integer>  xList = new ArrayList<>();
+        List<Double> objList = new ArrayList<>();
+        List<Double> subList = new ArrayList<>();
+        int i = 1;
+        for(OsCompareModel os : osDataList){
             xList.add(i++);
             subList.add(os.getSub());
             objList.add(os.getObj());
@@ -118,12 +160,14 @@ public class HighChartsController {
 
         List<BuildingModel> buildingMes = highChartsMapper.getBuildingMes();
         List<DetectData> allData = detectDataMapper.getAllDetectData();
+        System.out.println("测得的数据："+allData.size());
         for(DetectData data : allData){
             addToCorrectLocation(data,buildingMes);
         }
         System.out.println(buildingMes.size());
         for(BuildingModel model:buildingMes){
             System.out.println(model.getBuilding());
+            System.out.println(model.getDataList().size());
             categories.add(model.getBuilding());
             Double sum = 0.0;
             Integer count = 0;
