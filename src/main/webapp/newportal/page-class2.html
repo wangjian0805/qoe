@@ -38,6 +38,8 @@
 	<script src="https://img.hcharts.cn/highcharts/themes/sand-signika.js"></script>
 
 	<link href="assets/vendor/bootstrap/css/bootstrap-table.css" rel="stylesheet">
+	<link href="assets/vendor/bootstrap/css/bootstrap-table.css" rel="stylesheet">
+	<link href="assets/css/building.css" rel="stylesheet">
 	<script src="assets/vendor/bootstrap/js/bootstrap-table.js"></script>
 	<!--搜索事件-->
 	<script type="application/javascript">
@@ -53,7 +55,7 @@
             console.info(postData)
 			pick_mac = $("#search_mac").val()
             $.ajax({
-                url:"http://localhost:8080/api/high/itemlist",
+                url:"http://localhost:8080/qoe/api/high/itemlist",
                 dataType:"json",
 				data:{"pick_start_time":pick_start_time,"pick_end_time":pick_end_time,"pick_mac":pick_mac},
                 type:"GET",
@@ -88,22 +90,21 @@
             return fmt;
         }
 	</script>
-	<!--点击按钮事件-->
+	<!--点击建筑事件-->
 	<script type="application/javascript">
 		function changeChart(btn) {
-		    var mac_time = btn.value
-			console.info(mac_time)
-//			$("#spider-container").hide();
-//			$("#3d-container").hide();
-			$("#sliders").hide();
+		    var obj = $(btn);
+		    var building = obj.attr("value");
 
             $.ajax({
-                url:"http://localhost:8080/api/high/score",
+                url:"http://localhost:8080/qoe/api/high/osCompareByBuilding?building="+building,
                 dataType:"json",
                 type:"GET",
                 success:function(response){
                     var data = response.data;
-
+                    td_chart.xAxis.categories = data[0]
+                    td_chart.series[0].setData(data[1])
+                    td_chart.series[1].setData(data[2])
                 }
             });
 
@@ -186,93 +187,117 @@
 						<div id="top-container" style="width:100%;height:80px;" >
 							<h1 style="align:center;text-align:center;font-family:Microsoft YaHei;">测试点详情页</h1>
 						</div>
-						<!--<div id="page-nav" style="display: block;">-->
-							<!--<nav>-->
-								<!--<ul class="pagination" onselectstart="return false"-->
-									<!--style="display: block;">-->
-									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看教一实时流量图" data-toggle="tooltip" data-placement="top" title="点击查看实时流量图"  value="1"-->
-										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building1.jpg);background-repeat: no-repeat;-->
-    <!--background-position: center;"><p-->
-											<!--class="buildingName">教一</p>-->
-									<!--</li>-->
-									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看教二实时流量图" data-toggle="tooltip" data-placement="top" title="点击查看实时流量图" value="2"-->
-										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building2.jpg);background-repeat: no-repeat;-->
-    <!--background-position: center;"><p-->
-											<!--class="buildingName">教二</p>-->
-									<!--</li>-->
-									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看教三实时流量图" data-toggle="tooltip" data-placement="top" title="点击查看实时流量图" value="3"-->
-										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building3.jpg);background-repeat: no-repeat;-->
-    <!--background-position: center;"><p-->
-											<!--class="buildingName">教三</p>-->
-									<!--</li>-->
-									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看教四实时流量图" data-toggle="tooltip" data-placement="top" title="点击查看实时流量图" value="4"-->
-										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building4.jpg);background-repeat: no-repeat;-->
-    <!--background-position: center;"><p-->
-											<!--class="buildingName">教四</p>-->
-									<!--</li>-->
-									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看新科研楼实时流量图" value="5"-->
-										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building5.jpg);background-repeat: no-repeat;-->
-    <!--background-position: center;"><p-->
-											<!--class="buildingName">新科研楼</p>-->
-									<!--</li>-->
-									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看主楼实时流量图" value="6"-->
-										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building6.jpg);background-repeat: no-repeat;-->
-    <!--background-position: center;"><p-->
-											<!--class="buildingName">主楼</p>-->
-									<!--</li>-->
-									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看综合餐厅实时流量图" value="7"-->
-										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building7.jpg);background-repeat: no-repeat;-->
-    <!--background-position: center;"><p-->
-											<!--class="buildingName">综合餐厅</p>-->
-									<!--</li>-->
-									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看学生食堂实时流量图" value="8"-->
-										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building8.jpg);background-repeat: no-repeat;-->
-    <!--background-position: center;"><p-->
-											<!--class="buildingName">学生食堂</p>-->
-									<!--</li>-->
-									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看学生公寓1实时流量图" value="9"-->
-										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building9.jpg);background-repeat: no-repeat;-->
-    <!--background-position: center;"><p-->
-											<!--class="buildingName">学生公寓1</p>-->
-									<!--</li>-->
-									<!--<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看实时流量图" value="10"-->
-										<!--style="width:80px;height:80px;padding:20px;margin:10px;background:url(wibupt/img/building10.jpg);background-repeat: no-repeat;-->
-    <!--background-position: center;"><p-->
-											<!--class="buildingName">学生公寓2</p>-->
-									<!--</li>-->
-								<!--</ul>-->
-							<!--</nav>-->
-						<!--</div>-->
-						<!--<div id="list-container" style="width:25%;height:910px;float:left;">-->
-							<!--<div class="list-group">-->
-								<!--<a href="#" class="list-group-item active">测量区域列表</a>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">教学楼一</button>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">教学楼二</button>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">教学楼三</button>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">教学楼四</button>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">主楼</button>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">毛主席雕像</button>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">西门</button>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">图书馆</button>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">综合餐厅</button>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学苑餐厅</button>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生一号宿舍楼</button>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生二号宿舍楼</button>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生三号宿舍楼</button>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生四号宿舍楼</button>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生五号宿舍楼</button>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生六号宿舍楼</button>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生八号宿舍楼</button>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生九号宿舍楼</button>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生十号宿舍楼</button>-->
-								<!--<button type="button" class="list-group-item" onclick="changeChart(this)">学生十三号宿舍楼</button>-->
-								<!--<button type="button" class="btn btn-warning btn-toastr" data-context="warning" data-message="This is warning info" data-position="top-right" style="float:left;width: 50%;">最近10条</button>-->
-								<!--<button type="button" class="btn btn-danger btn-toastr" data-context="error" data-message="This is error info" data-position="top-right" style="float: left;width: 50%;">随机10条</button>-->
-							<!--</div>-->
-						<!--</div>-->
+						<div id="page-nav-1" style="display: block;margin-top: 30px;">
+							<nav>
+								<ul class="pagination" onselectstart="return false"
+									style="display: block;">
+									<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看教一实时流量图" data-toggle="tooltip" data-placement="top" title="点击查看实时流量图"  value="1"
+										style="width:80px;height:80px;padding:20px;margin:10px;background:url(assets/img/building1.jpg);background-repeat: no-repeat;
+    background-position: center;" onclick="changeChart(this)"><p
+											class="buildingName">教一</p>
+									</li>
+									<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看教二实时流量图" data-toggle="tooltip" data-placement="top" title="点击查看实时流量图" value="2"
+										style="width:80px;height:80px;padding:20px;margin:10px;background:url(assets/img/building2.jpg);background-repeat: no-repeat;
+    background-position: center;"><p
+											class="buildingName">教二</p>
+									</li>
+									<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看教三实时流量图" data-toggle="tooltip" data-placement="top" title="点击查看实时流量图" value="教三"
+										style="width:80px;height:80px;padding:20px;margin:10px;background:url(assets/img/building3.jpg);background-repeat: no-repeat;
+    background-position: center;" onclick="changeChart(this)"><p
+											class="buildingName">教三</p>
+									</li>
+									<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看教四实时流量图" data-toggle="tooltip" data-placement="top" title="点击查看实时流量图" value="4"
+										style="width:80px;height:80px;padding:20px;margin:10px;background:url(assets/img/building4.jpg);background-repeat: no-repeat;
+    background-position: center;"><p
+											class="buildingName">教四</p>
+									</li>
+									<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看新科研楼实时流量图" value="5"
+										style="width:80px;height:80px;padding:20px;margin:10px;background:url(assets/img/building5.jpg);background-repeat: no-repeat;
+    background-position: center;"><p
+											class="buildingName">新科研楼</p>
+									</li>
+									<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看主楼实时流量图" value="6"
+										style="width:80px;height:80px;padding:20px;margin:10px;background:url(assets/img/building6.jpg);background-repeat: no-repeat;
+    background-position: center;"><p
+											class="buildingName">主楼</p>
+									</li>
+									<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看综合餐厅实时流量图" value="7"
+										style="width:80px;height:80px;padding:20px;margin:10px;background:url(assets/img/building7.jpg);background-repeat: no-repeat;
+    background-position: center;"><p
+											class="buildingName">综合餐厅</p>
+									</li>
+									<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看学生食堂实时流量图" value="8"
+										style="width:80px;height:80px;padding:20px;margin:10px;background:url(assets/img/building8.jpg);background-repeat: no-repeat;
+    background-position: center;"><p
+											class="buildingName">学生食堂</p>
+									</li>
+									<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看学生公寓1实时流量图" value="9"
+										style="width:80px;height:80px;padding:20px;margin:10px;background:url(assets/img/building9.jpg);background-repeat: no-repeat;
+    background-position: center;"><p
+											class="buildingName">学生公寓1</p>
+									</li>
+									<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看实时流量图" value="10"
+										style="width:80px;height:80px;padding:20px;margin:10px;background:url(assets/img/building10.jpg);background-repeat: no-repeat;
+    background-position: center;"><p
+											class="buildingName">学生公寓2</p>
+									</li>
+								</ul>
+							</nav>
+						</div>
+						<div id="page-nav-2" style="display: block;margin-top: 30px;">
+							<nav>
+								<ul class="pagination pagination2" onselectstart="return false"
+									style="display: block;">
+									<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看学生公寓3实时流量图" value="19"
+										style="width:80px;height:80px;padding:20px;margin:10px;background:url(assets/img/building19.jpg);background-repeat: no-repeat;
+    background-position: center;"><p
+											class="buildingName">学生公寓3</p>
+									</li>
+									<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看学生公寓4实时流量图" value="11"
+										style="width:80px;height:80px;padding:20px;margin:10px;background:url(assets/img/building11.jpg);background-repeat: no-repeat;
+    background-position: center;"><p
+											class="buildingName">学生公寓4</p>
+									</li>
+									<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看学生公寓5实时流量图" value="12"
+										style="width:80px;height:80px;padding:20px;margin:10px;background:url(assets/img/building12.jpg);background-repeat: no-repeat;
+    background-position: center;"><p
+											class="buildingName">学生公寓5</p>
+									</li>
+									<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看学生公寓6实时流量图" value="13"
+										style="width:80px;height:80px;padding:20px;margin:10px;background:url(assets/img/building13.jpg);background-repeat: no-repeat;
+    background-position: center;"><p
+											class="buildingName">学生公寓6</p>
+									</li>
+									<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看学生公寓8实时流量图" value="14"
+										style="width:80px;height:80px;padding:20px;margin:10px;background:url(assets/img/building14.jpg);background-repeat: no-repeat;
+    background-position: center;"><p
+											class="buildingName">学生公寓8</p>
+									</li>
+									<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看学生公寓9实时流量图" value="15"
+										style="width:80px;height:80px;padding:20px;margin:10px;background:url(assets/img/building15.jpg);background-repeat: no-repeat;
+    background-position: center;"><p
+											class="buildingName">学生公寓9</p>
+									</li>
+									<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看学生公寓10实时流量图" value="16"
+										style="width:80px;height:80px;padding:20px;margin:10px;background:url(assets/img/building16.jpg);background-repeat: no-repeat;
+    background-position: center;"><p
+											class="buildingName">学生公寓10</p>
+									</li>
+									<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看学生公寓11实时流量图" value="17"
+										style="width:80px;height:80px;padding:20px;margin:10px;background:url(assets/img/building17.jpg);background-repeat: no-repeat;
+    background-position: center;"><p
+											class="buildingName">学生公寓11</p>
+									</li>
+									<li class="commonPage thumbnail" data-toggle="tooltip" data-placement="top" title="点击查看学生公寓29实时流量图" value="18"
+										style="width:80px;height:80px;padding:20px;margin:10px;background:url(assets/img/building18.jpg);background-repeat: no-repeat;
+    background-position: center;"><p
+											class="buildingName">学生公寓29</p>
+									</li>
+
+								</ul>
+							</nav>
+
 						<div id="3d-container" style="width:100%;height: 500px;"></div>
-
-
 						<div id="wall-container" style="width:100%;height: 10px;float: left;"></div>
 					</div>
 				</div>
@@ -332,7 +357,7 @@
             }]
         });
         $.ajax({
-            url:"http://localhost:8080/api/high/osCompare",
+            url:"http://localhost:8080/qoe/api/high/osCompare",
             dataType:"json",
             type:"GET",
             success:function(response){
