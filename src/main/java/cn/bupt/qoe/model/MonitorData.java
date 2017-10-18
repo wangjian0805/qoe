@@ -10,7 +10,7 @@ public class MonitorData {
 	private Double memoryConsumption;
 	private Double currentCpu;
 	private String mark;
-	
+
 	
 	public Double getCurrentCpu() {
 		return currentCpu;
