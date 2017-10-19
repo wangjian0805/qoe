@@ -247,12 +247,13 @@
         });
 
 	</script>
+
 	<script>
         $(function () {
             var area_chart = new Highcharts.Chart({
 //            $('#time-container').highcharts({
                 chart: {
-                    renderTo: 'area-container',
+                    renderTo:'area-container',
                     zoomType: 'xy'
                 },
                 title: {
@@ -264,21 +265,18 @@
                 xAxis: [{
                     categories: [],
                     crosshair: true,
-                    style: {
-                        color: Highcharts.getOptions().colors[2]
-                    }
                 }],
                 yAxis: [{ // Primary yAxis
                     labels: {
                         format: '{value} ',
                         style: {
-                            color: Highcharts.getOptions().colors[2]
+                            color: '#000'
                         }
                     },
                     title: {
                         text: '方差值',
                         style: {
-                            color: Highcharts.getOptions().colors[2]
+                            color: '#000'
                         }
                     },
                     opposite: true
@@ -287,13 +285,13 @@
                     title: {
                         text: 'Mos值',
                         style: {
-                            color: Highcharts.getOptions().colors[2]
+                            color: '#000'
                         }
                     },
                     labels: {
                         format: '{value}',
                         style: {
-                            color: Highcharts.getOptions().colors[2]
+                            color: '#000'
                         }
                     }
                 }],
@@ -311,7 +309,7 @@
                 },
                 series: [{
                     name: '平均Mos值',
-                    type: 'spline',
+                    type: 'column',
                     yAxis: 1,
                     data: [],
                     tooltip: {
@@ -319,7 +317,7 @@
                     }
                 }, {
                     name: '方差值',
-                    type: 'spline',
+                    type: 'column',
                     data: [],
                     tooltip: {
                         valueSuffix: ' '
