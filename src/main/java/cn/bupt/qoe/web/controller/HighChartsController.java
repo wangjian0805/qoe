@@ -116,6 +116,8 @@ public class HighChartsController {
 			h.setLng(hotMapModelList.get(0).getLng());
 
 			h.setCount(hotMapModelList.get(0).getCount());
+			
+			h.setMark(hotMapModelList.get(0).getMark());;
 
 			filteredHotMapModelList.add(h);
 
@@ -150,6 +152,8 @@ public class HighChartsController {
 						nh.setLng(hotMapModelList.get(i).getLng());
 
 						nh.setCount(hotMapModelList.get(i).getCount());
+						
+						nh.setMark(hotMapModelList.get(i).getMark());
 
 						filteredHotMapModelList.add(nh);
 						// System.out.println("hotMapModelList中第 " + (i + 1) +

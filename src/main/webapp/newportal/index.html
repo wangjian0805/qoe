@@ -56,8 +56,8 @@
             var map = new BMap.Map("baidumap");          // 创建地图实例
             var point = new BMap.Point(116.364549,39.968112);
             map.centerAndZoom(point, 18); // 初始化地图，设置中心点坐标和地图级别
-            map.enableScrollWheelZoom(); // 允许滚轮缩放
-
+            //map.enableScrollWheelZoom(); // 允许滚轮缩放
+			map.disableDragging();     //禁止拖拽
             var myIcon1 =new BMap.Icon("assets/img/transparent.png", new BMap.Size(10, 10), {imageOffset: new BMap.Size(0, 0)});
             var myShadowIcon = new BMap.Icon("assets/img/transparent.png", new BMap.Size(10, 10), {imageOffset: new BMap.Size(0, 0)});
 
@@ -65,7 +65,7 @@
             heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":30,"blur":1,"gradient":{0.2:'#33FF33',0.4:'#99FF1A',0.6:'#FFFF00',0.8:'#FF8000',1:'#FF0000'}});
             map.addOverlay(heatmapOverlay);
             $.ajax({
-                url:"http://localhost:8080/qoe/api/high/map",
+                url:"http://localhost:58080/qoe/api/high/map",
                 dataType:"json",
                 type:"GET",
                 success:function(response){
@@ -111,7 +111,7 @@
                 console.info("点击的这个点是"+mac_time)
                 document.getElementById("index-title").innerHTML = "本次测量获取参数的详细展示";
                 $("#baidumap").hide();
-                var remoteUrl = "http://localhost:8080/qoe/api/high/detail?mark="+mac_time;
+                var remoteUrl = "http://localhost:58080/qoe/api/high/detail?mark="+mac_time;
                 $.ajax({
                     url:remoteUrl,
                     dataType:"json",
@@ -255,7 +255,7 @@
 							<div id="top-container" style="width:100%;height:60px;">
 								<h1 id="index-title" style="align:center;text-align:center;font-family:Microsoft YaHei;">北邮校园Mos值分布热图</h1>
 							</div>
-							<div id="baidumap" style="min-height:700px;"></div>
+							<div id="baidumap" style="min-height:900px;"></div>
 							<div id="detail-container" style="width:100%;display:none;float: left;" >
 								<!--<div id="dtop-container" style="width:100%;height:60px;">-->
 									<!--<h1 style="align:center;text-align:center;font-family:Microsoft YaHei;">本次测量获取参数的详细展示</h1>-->
