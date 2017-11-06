@@ -10,6 +10,8 @@
 	<!-- VENDOR CSS -->
 
 	<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+	
+	<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-tour.min.css">
 	<link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="assets/vendor/linearicons/style.css">
 	<!-- MAIN CSS -->
@@ -26,6 +28,7 @@
 	<script src="assets/vendor/jquery/jquery.min.js"></script>
 	<script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 	<script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="assets/vendor/bootstrap/js/bootstrap-tour.min.js"></script>
 	<script src="assets/scripts/klorofil-common.js"></script>
 	<script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
 	<script src="https://img.hcharts.cn/highcharts/highcharts-more.js"></script>
@@ -38,7 +41,7 @@
 
 	<script type="application/javascript">
         $.ajax({
-            url:"http://10.103.93.23:8080/qoe/api/high/stastic",
+            url:"http://localhost:8080/qoe/api/high/stastic",
             dataType:"json",
             type:"GET",
             success:function(response){
@@ -77,7 +80,7 @@
                 $("#buildingIntroduction").html(this.options[this.selectedIndex].text);
                 var building = this.options[this.selectedIndex].text
                 $.ajax({
-                    url:"http://10.103.93.23:8080/qoe/api/high/osCompareByBuilding?building="+building,
+                    url:"http://localhost:8080/qoe/api/high/osCompareByBuilding?building="+building,
                     dataType:"json",
                     type:"GET",
                     success:function(response){
@@ -94,7 +97,7 @@
             var building = obj.attr("value");
 
             $.ajax({
-                url:"http://10.103.93.23:8080/qoe/api/high/osCompareByBuilding?building="+building,
+                url:"http://localhost:8080/qoe/api/high/osCompareByBuilding?building="+building,
                 dataType:"json",
                 type:"GET",
                 success:function(response){
@@ -159,7 +162,7 @@
 				<nav>
 					<ul class="nav">
 						<li><a href="index.html" class=""><i class="lnr lnr-home"></i> <span>首页</span></a></li>
-						<li><a href="page-class1.html" class=""><i class="lnr lnr-chart-bars"></i><span>数据总览</span></a></li>
+						<li id="dataoverview"><a href="page-class1.html" class=""><i class="lnr lnr-chart-bars"></i><span>数据总览</span></a></li>
 						<li><a href="about.html" class=""><i class="lnr lnr-alarm"></i> <span>关于我们</span></a></li>
 					</ul>
 				</nav>
@@ -171,7 +174,7 @@
 			<!-- MAIN CONTENT -->
 			<div class="main-content">
 				<div class="container-fluid">
-					<div class="panel panel-headline">
+					<div id="overview" class="panel panel-headline">
 						<div class="panel-heading">
 							<h3 class="panel-title">数据总览</h3>
 							<p class="panel-subtitle">Period: Sep 14, 2017 - Now</p>
@@ -221,7 +224,7 @@
 					<div class="row">
 						<div class="col-md-6">
 							<!-- RECENT PURCHASES -->
-							<div class="panel">
+							<div id="mosSub" class="panel">
 								<div class="panel-heading">
 									<h3 class="panel-title">用户主观MoS值分布</h3>
 									<div class="right">
@@ -237,7 +240,7 @@
 						</div>
 						<div class="col-md-6">
 							<!-- RECENT PURCHASES -->
-							<div class="panel">
+							<div id="mosObj" class="panel">
 								<div class="panel-heading">
 									<h3 class="panel-title">用户客观MoS值分布</h3>
 									<div class="right">
@@ -255,7 +258,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<!-- RECENT PURCHASES -->
-							<div class="panel">
+							<div id="moscomparebybuilding" class="panel">
 								<div class="panel-heading">
 									<h3 class="panel-title">不同区域的MoS平均值和方差对比图</h3>
 									<div class="right">
@@ -270,7 +273,7 @@
 							<!-- END RECENT PURCHASES -->
 						</div>
 					</div>
-					<div class="row">
+					<div id="moscompareinbuilding" class="row">
 						<div class="col-md-3">
 							<!-- RECENT PURCHASES -->
 							<div class="panel">
@@ -337,7 +340,7 @@
 						</div>
 						<div class="col-md-9">
 							<!-- RECENT PURCHASES -->
-							<div class="panel">
+							<div  class="panel">
 								<div class="panel-heading">
 									<h3 class="panel-title">区域主客观MoS值对比</h3>
 									<div class="right">
@@ -421,7 +424,7 @@
                 }]
             });
             $.ajax({
-                url:"http://10.103.93.23:8080/qoe/api/high/main",
+                url:"http://localhost:8080/qoe/api/high/main",
                 dataType:"json",
                 type:"GET",
                 success:function(response){
@@ -498,7 +501,7 @@
                 }]
             });
             $.ajax({
-                url:"http://10.103.93.23:8080/qoe/api/high/mainobj",
+                url:"http://localhost:8080/qoe/api/high/mainobj",
                 dataType:"json",
                 type:"GET",
                 success:function(response){
@@ -588,7 +591,7 @@
                 }]
             });
             $.ajax({
-                url:"http://10.103.93.23:8080/qoe/api/high/area",
+                url:"http://localhost:8080/qoe/api/high/area",
                 dataType:"json",
                 type:"GET",
                 success:function(response){
@@ -694,7 +697,7 @@
                 }]
             });
             $.ajax({
-                url:"http://10.103.93.23:8080/qoe/api/high/osCompare",
+                url:"http://localhost:8080/qoe/api/high/osCompare",
                 dataType:"json",
                 type:"GET",
                 success:function(response){
@@ -706,6 +709,8 @@
             });
         });
 	</script>
+	<!-- 页面引导 JavaScript -->
+	<script src="assets/scripts/guide.js"></script>
 </body>
 
 </html>

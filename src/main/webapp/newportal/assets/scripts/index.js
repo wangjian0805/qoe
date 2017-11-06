@@ -54,7 +54,7 @@ function showMapData( mosMin, mosMax,timeStart ,timeStop ,againstHeaviness,radiu
     heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":radius,blur:"1","gradient":{0.2:'#0000FF',0.4:'#99FF00',0.6:'#FFFF00',1:'#FF0000'}});
     //0.2:'#3399FF',0.4:'#99FF00',0.6:'#FFFF00',1:'#FF0000'
     map.addOverlay(heatmapOverlay);
-    var getMapDataUrl = "http://10.103.93.23:8080/qoe/api/high/map";
+    var getMapDataUrl = "http://localhost:8080/qoe/api/high/map";
     getMapDataUrl = getMapDataUrl+
     	"?mosMin="+mosMin+"&mosMax="+mosMax+"&timeStart="+timeStart+"&timeStop="+timeStop+
     	"&againstHeaviness="+againstHeaviness+"&radius="+radius;
@@ -92,7 +92,7 @@ function showMapData( mosMin, mosMax,timeStart ,timeStop ,againstHeaviness,radiu
                 if(point.count < mosMin){
                 	mosMin = point.count;
                 }
-                showInfo(point.count,marker,mac_time,buildingName,buildingNo);
+                showInfo(map,point.count,marker,mac_time,buildingName,buildingNo);
             }
             if(mosNum>0){
             	mosAvg  = mosAvg/mosNum;
@@ -137,7 +137,7 @@ function showMapData( mosMin, mosMax,timeStart ,timeStop ,againstHeaviness,radiu
 }
 
 //	为每个marker设置监听
-function showInfo(count,marker,mac_time,buildingName,buildingNo){
+function showInfo(map,count,marker,mac_time,buildingName,buildingNo){
     var contentt = "<div><h4 style='margin:0 0 0px 0;padding:0.2em 0'>详情</h4>" +
         "<img style='float:right;margin:1px' id='imgDemo' src='assets/img/building"+buildingNo+".jpg'" +
         "width='96' height='128' title='XXX'/>" +
@@ -151,12 +151,18 @@ function showInfo(count,marker,mac_time,buildingName,buildingNo){
         enableMessage:false
     };
     */
+    var t;
     var infowindow = new BMap.InfoWindow(contentt);
     marker.addEventListener("mouseover",function(){
         this.openInfoWindow(infowindow);
+        window.clearTimeout(t);
     });
     marker.addEventListener("mouseout",function(e){
         this.closeInfoWindow(infowindow);
+        //重新设置map中心
+        t = window.setTimeout(function(){
+       	 	map.panTo(new BMap.Point(116.364895,39.968276));
+        },1500); 
     });
     marker.addEventListener("click",function(e){
         
