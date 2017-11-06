@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -95,79 +96,119 @@ public class HighChartsController {
 
     @RequestMapping("/map")
     @ResponseBody//对象变json
-    public WebResult getOsCompareData(){
-    	WebResult result = new WebResult();
-		// List<DetectData> detectDataList =
-		// detectDataMapper.getAllDetectData();
+    public WebResult getOsCompareData(@RequestParam("mosMin")int mosMin,
+                                      @RequestParam("mosMax")int mosMax,@RequestParam("timeStart")String timeStart,
+                                      @RequestParam("timeStop")String timeStop,@RequestParam("againstHeaviness") boolean againstHeaviness,
+                                      @RequestParam("radius")double radius){
+        System.out.println("进入/map");
+        System.out.println("解析出参数 -- mosMin:"+mosMin+",mosMax:"+mosMax+",timeStart:"+timeStart+
+                ",timeStop:"+timeStop+",againstHeaviness:"+againstHeaviness+",radius: "+radius);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        List<HotMapModel> hotMapModelList = new ArrayList<HotMapModel>();
+        WebResult result = new WebResult();
+        //建筑物数据库信息
+        List<BuildingModel> buildingMes = highChartsMapper.getBuildingMes();
+        //将起始时间转换为时间戳
+        Date dateStart = null;
+        Date dateStop = null;
+        Long tStart = null;
+        Long tStop = null;
+        try {
+            if(!timeStart.equals("")){
+                dateStart = simpleDateFormat.parse(timeStart);
+                tStart = dateStart.getTime();
+            }
+            if(!timeStop.equals("")){
+                dateStop = simpleDateFormat.parse(timeStop);
+                tStop = dateStop.getTime()+24*60*60*1000;
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println(
+                "查询的参数-- mosMin: "+mosMin+",mosMax: "+mosMax+",tStart: "+tStart+
+                        ",tStop: "+tStop+",againstHeaviness: "+againstHeaviness);
+        HeatMapOperator hmo = new HeatMapOperator();
+        hmo.setMosMin(mosMin);
+        hmo.setMosMax(mosMax);
+        hmo.setTimeStart(tStart);
+        hmo.setTimeStop(tStop);
+        hmo.setAgainstHeaviness(againstHeaviness);
+        hotMapModelList = highChartsMapper.getHotMapDataByOptions(hmo);
+        System.out.println("得到原始的 hotMapModelList，数组长度： " + hotMapModelList.size());
+        // 过滤后的hotMapModelList
+        List<HotMapModel> filteredHotMapModelList = new ArrayList<HotMapModel>();
+        if(againstHeaviness){
+            System.out.println("需要反重叠");
+            double distance = 0.00013*(radius/25);
+            System.out.println("distance: "+distance);
+            //若需要 反重叠
+            if (hotMapModelList.size() > 0) {
+                // 将第一个元素保存到filteredHotMapModelList
+                //System.out.println("将第一个元素保存到filteredHotMapModelList");
+                HotMapModel h = new HotMapModel();
+                Building b = new Building();
+                //得到该点的建筑信息
+                b = getBuildingMesforPostion(hotMapModelList.get(0).getLat(),hotMapModelList.get(0).getLng(), buildingMes);
+                h.setLat(hotMapModelList.get(0).getLat());
+                h.setLng(hotMapModelList.get(0).getLng());
+                h.setCount(hotMapModelList.get(0).getCount());
+                h.setMark(hotMapModelList.get(0).getMark());
+                if(b !=null){
+                    //System.out.println("获取该点地理信息："+b.getBuildingName());
+                    h.setBuildingNo(b.getBuildingNo());
+                    h.setBuildingName(b.getBuildingName());
+                }else{
+                    //System.out.println("该点未获取到地理信息");地理信息设置为默认
+                    h.setBuildingNo(1);
+                    h.setBuildingName("北邮校园");
+                }
+                //System.out.println("第一个元素的参数："+hotMapModelList.get(0).getLat()+","+hotMapModelList.get(0).getCount());
+                filteredHotMapModelList.add(h);
+                // 遍历hotMapModelList，将每个元素和filteredHotMapModelList中的元素对比，当经纬度之差都大于某个值时，才将该hotMapModelList存入filteredHotMapModelList
+                for (int i = 0; i < hotMapModelList.size(); i++) {
+                    Double longitude = hotMapModelList.get(i).getLng();
+                    Double latitude = hotMapModelList.get(i).getLat();
+                    for (int j = 0; j < filteredHotMapModelList.size(); j++) {
+                        Double Baselongitude = filteredHotMapModelList.get(j).getLng();
+                        Double Baselatitude = filteredHotMapModelList.get(j).getLat();
+                        //System.out.print("Baselongitude:"+Baselongitude+",longitude:"+longitude);
+                        //System.out.println("-------- Baselatitude:"+Baselatitude+",latitude:"+latitude);
+                        if (Math.abs(longitude - Baselongitude) < distance && Math.abs(latitude - Baselatitude) < distance) {
+                            break;
+                        } else if (j == filteredHotMapModelList.size() - 1) {
+                            HotMapModel nh = new HotMapModel();
+                            Building nb = new Building();
+                            //得到该点的建筑信息
+                            nb = getBuildingMesforPostion(hotMapModelList.get(i).getLat(), hotMapModelList.get(i).getLng(), buildingMes);
+                            nh.setLat(hotMapModelList.get(i).getLat());
+                            nh.setLng(hotMapModelList.get(i).getLng());
+                            nh.setCount(hotMapModelList.get(i).getCount());
+                            nh.setMark(hotMapModelList.get(i).getMark());
+                            if(nb != null){
+                                //System.out.println("获取该点地理信息："+nb.getBuildingName());
+                                nh.setBuildingNo(nb.getBuildingNo());
+                                nh.setBuildingName(nb.getBuildingName());
+                            }else{
+                                //System.out.println("该点未获取到地理信息");地理信息设置为默认
+                                nh.setBuildingNo(1);
+                                nh.setBuildingName("北邮校园");
+                            }
+                            filteredHotMapModelList.add(nh);
+                        }
+                    }
+                }
+            }
 
-		List<HotMapModel> hotMapModelList = highChartsMapper.getHotMapData();
-		System.out.println("得到原始的 hotMapModelList，数组长度： " + hotMapModelList.size());
-		// 过滤后的hotMapModelList
-		List<HotMapModel> filteredHotMapModelList = new ArrayList<HotMapModel>();
+        }else{
+            filteredHotMapModelList = hotMapModelList;
+            //遍历测量记录，加上位置信息
 
-		if (hotMapModelList.size() > 0) {
-
-			// 将第一个元素保存到filteredHotMapModelList
-
-			HotMapModel h = new HotMapModel();
-
-			h.setLat(hotMapModelList.get(0).getLat());
-
-			h.setLng(hotMapModelList.get(0).getLng());
-
-			h.setCount(hotMapModelList.get(0).getCount());
-			
-			h.setMark(hotMapModelList.get(0).getMark());;
-
-			filteredHotMapModelList.add(h);
-
-			// 遍历hotMapModelList，将每个元素和filteredHotMapModelList中的元素对比，当经纬度之差都大于某个值时，才将该hotMapModelList存入filteredHotMapModelList
-
-			for (int i = 0; i < hotMapModelList.size(); i++) {
-
-				Double longitude = hotMapModelList.get(i).getLng();
-
-				Double latitude = hotMapModelList.get(i).getLat();
-
-				for (int j = 0; j < filteredHotMapModelList.size(); j++) {
-
-					Double Baselongitude = filteredHotMapModelList.get(j).getLng();
-
-					Double Baselatitude = filteredHotMapModelList.get(j).getLat();
-
-					if (Math.abs(longitude - Baselongitude) < 0.00005 || Math.abs(latitude - Baselatitude) < 0.00005) {
-
-						// System.out.println("hotMapModelList中第 " + (i + 1) +
-						// "条记录不符合条件，差值分别为： "
-
-						// + Math.abs(longitude - Baselongitude) + ", " +
-						// Math.abs(latitude - Baselatitude));
-						break;
-					} else if (j == filteredHotMapModelList.size() - 1) {
-
-						HotMapModel nh = new HotMapModel();
-
-						nh.setLat(hotMapModelList.get(i).getLat());
-
-						nh.setLng(hotMapModelList.get(i).getLng());
-
-						nh.setCount(hotMapModelList.get(i).getCount());
-						
-						nh.setMark(hotMapModelList.get(i).getMark());
-
-						filteredHotMapModelList.add(nh);
-						// System.out.println("hotMapModelList中第 " + (i + 1) +
-						// "条记录符合条件");
-					}
-				}
-			}
-		}
-		System.out.println("过滤后,数组长度： "+filteredHotMapModelList.size());
-		for (HotMapModel hot : filteredHotMapModelList) {
-			hot.setCount(hot.getCount() * 100);
-		}
-		result.setData(filteredHotMapModelList);
-		return result;
+        }
+        System.out.println("(过滤)后,数组长度： "+filteredHotMapModelList.size());
+        result.setData(filteredHotMapModelList);
+        return result;
     }
 
     @RequestMapping("/detail")
@@ -186,9 +227,14 @@ public class HighChartsController {
         WebResult result = new WebResult();
         Integer test_num = highChartsMapper.getTestNum();
         Integer mac_num = highChartsMapper.getMacNum();
+        Integer play_num = highChartsMapper.getPlayNum();
+        Integer play_time = highChartsMapper.getMonitorNum()/play_num;
+
         List<Integer> list = new ArrayList<>();
         list.add(test_num);
         list.add(mac_num);
+        list.add(play_num);
+        list.add(play_time);
         result.setData(list);
         return result;
     }
@@ -199,6 +245,24 @@ public class HighChartsController {
         WebResult result = new WebResult();
         MosData mosData = new MosData();
         List<Double> doubleList = highChartsMapper.getMosData();
+        double sum = 0.0;
+        for(Double num:doubleList){
+            sum+=num;
+        }
+        mosData.setMos1(remain3dot(doubleList.get(0)/sum)*100);
+        mosData.setMos2(remain3dot(doubleList.get(1)/sum)*100);
+        mosData.setMos3(remain3dot(doubleList.get(2)/sum)*100);
+        mosData.setMos4(remain3dot(doubleList.get(3)/sum)*100);
+        mosData.setMos5(remain3dot(doubleList.get(4)/sum)*100);
+        result.setData(mosData);
+        return result;
+    }
+    @RequestMapping("/mainobj")
+    @ResponseBody//对象变json
+    public WebResult getObjMosData(){
+        WebResult result = new WebResult();
+        MosData mosData = new MosData();
+        List<Double> doubleList = highChartsMapper.getObjMosData();
         double sum = 0.0;
         for(Double num:doubleList){
             sum+=num;
@@ -427,7 +491,9 @@ public class HighChartsController {
 		detailModel.setVideoStreamBitRate(data.getVideoStreamBitRate());
 		detailModel.setVideoLength(data.getVideoLength());
 		detailModel.setInitTime(data.getInitTime());
-		detailModel.setVideoBufferStart(data.getVideoBufferStart());
+		detailModel.setVideoBufferStart(new Date(data.getVideoBufferStart()));
+		detailModel.setRebuffNum(data.getStopNum());
+		detailModel.setRebuffTime(data.getStopTimeAvg());
 		Integer times = data.getTest().size();
 		if (times == 0)
 			return detailModel;
@@ -454,6 +520,22 @@ public class HighChartsController {
 		detailModel.setLongitude(data.getTest().get(0).getLongitude());
 		detailModel.setLatitude(data.getTest().get(0).getLatitude());
 
+		long overAllMos = Math.round(data.getMosOverall());
+		String manyi = new String();
+		if(overAllMos==1)   manyi="非常糟糕";
+		else if(overAllMos==2)  manyi="比较差劲";
+		else if(overAllMos==3)  manyi="一般";
+		else if(overAllMos==4)  manyi="比较满意";
+		else    manyi="非常满意";
+		detailModel.setManyi(manyi);
+
+		String bodong = new String();
+		if(var<5)   bodong="较小";
+		else if(var<10)     bodong="一般";
+		else bodong="较大";
+		detailModel.setBodong(bodong);
+
+
 		Integer len = data.getMonitor().size();
 		Double video_len = Double.valueOf(data.getVideoLength() * 1000);
 		List<String> xAxis = new ArrayList<>();
@@ -461,12 +543,14 @@ public class HighChartsController {
 		List<Double> subScore = new ArrayList<>();
 		List<Double> messageDelay = new ArrayList<>();
 
+
 		List<Double> playPercentage = new ArrayList<>();
 		List<Double> bufferPercentage = new ArrayList<>();
 		List<Double> sendSpeed = new ArrayList<>();
 		List<Double> netSpeed = new ArrayList<>();
 		List<Double> memoryConsumption = new ArrayList<>();
-		int j = 0;
+        List<Double> currentCPU = new ArrayList<>();
+        int j = 0;
 		Long startTime = data.getMonitor().get(0).getMonitorTimeStamp();
 		for (Integer i = 0; i < len; i++) {
 			xAxis.add(i + "s");
@@ -476,6 +560,7 @@ public class HighChartsController {
 			sendSpeed.add(Double.valueOf(data.getMonitor().get(i).getSendSpeed()) / 1000);
 			netSpeed.add(Double.valueOf(data.getMonitor().get(i).getNetSpeed()) / 1000);
 			memoryConsumption.add(data.getMonitor().get(i).getMemoryConsumption());
+            currentCPU.add(data.getMonitor().get(i).getCurrentCpu());
 			if (j >= data.getTest().size()
 					|| i != timeStamp2second(data.getTest().get(j).getTestTimeStamp(), startTime)) {
 				objScore.add(0.0);
@@ -499,6 +584,7 @@ public class HighChartsController {
 		detailModel.setSendSpeed(sendSpeed);
 		detailModel.setNetSpeed(netSpeed);
 		detailModel.setMemoryConsumption(memoryConsumption);
+		detailModel.setCurrentCPU(currentCPU);
 		return detailModel;
 	}
 
@@ -534,4 +620,25 @@ public class HighChartsController {
 			}
 		}
 	}
+
+    //获取当前经纬度所处的建筑物信息
+
+    public Building getBuildingMesforPostion(Double latitude,Double longitude,List<BuildingModel> buildingMes){
+        Building result = new Building();
+        for (int i = 0; i < buildingMes.size(); i++) {
+            if (longitude >= buildingMes.get(i).getLatitudeLeft()
+                    && longitude <= buildingMes.get(i).getLatitudeRight()
+                    && latitude >= buildingMes.get(i).getLongitudeDown()
+                    && latitude <= buildingMes.get(i).getLongitudeUp()) {
+                result.setBuildingNo(buildingMes.get(i).getId());
+                result.setBuildingName(buildingMes.get(i).getBuilding());
+                //System.out.println("找到匹配的建筑物："+buildingMes.get(i).getBuilding());
+                return result;
+            }
+        }
+        //System.out.println("没有匹配的建筑物信息");
+        result.setBuildingNo(0);
+        result.setBuildingName("北邮校园");
+        return result;
+    }
 }

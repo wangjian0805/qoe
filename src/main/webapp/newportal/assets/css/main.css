@@ -72,7 +72,7 @@ footer {
 
 #wrapper #sidebar-nav,
 #wrapper .main {
-  padding-top: 80px; }
+  padding-top: 85px; }
 
 @media screen and (max-width: 767px) {
   #wrapper #sidebar-nav,
@@ -112,8 +112,14 @@ footer {
     display: none; } }
 
 .main-content {
-  padding: 28px 10px; }
-
+  padding: 28px 10px 0px 10px; }
+.second-content {
+	padding: 28px 10px 0px 10px;
+}
+.whole-content{
+	margin-right:0px;
+	margin-left:0px;
+}
 .navbar + .main-content {
   padding: 105px 0 28px 5px; }
   @media screen and (max-width: 767px) {
@@ -791,21 +797,23 @@ ul.activity-list > li {
 .progress-bar-danger {
   background-color: #F9354C; }
 
-.weekly-summary {
-  margin-bottom: 30px;
-  font-weight: 300; }
-  .weekly-summary .number {
+.mapinfo-summary {
+  font-weight: 350; 
+  padding-left:27px;
+  padding-bottom:10px;}
+  .mapinfo-summary .number {
     font-size: 36px; }
-  .weekly-summary i {
+  .mapinfo-summary i {
     font-size: 16px;
     margin-left: 10px; }
-  .weekly-summary .percentage {
+  .mapinfo-summary .percentage {
     position: relative;
     top: -7px; }
-  .weekly-summary .info-label {
+  .mapinfo-summary .info-label {
     display: block;
     margin-bottom: 10px;
-    font-weight: normal; }
+    font-weight: normal; 
+    }
 
 .todo-list > li {
   border-top: 1px solid #F0F0F0;
@@ -1166,11 +1174,11 @@ ul.activity-list > li {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.2); }
+    background-color: rgba(0, 0, 0, 0); }
   .profile-header .profile-main {
     position: relative;
-    padding: 20px;
-    background-image: url("../../assets/img/profile-bg.png");
+    padding: 2px;
+    /*background-image: url("../../assets/img/profile-bg.png");*/
     background-repeat: no-repeat;
     background-size: cover; }
   .profile-header .name {
@@ -1765,3 +1773,19 @@ ul.activity-timeline > li {
   font-family: 'Lato', sans-serif;
   font-size: 18px;
 }
+
+.weekly-summary {
+  margin-bottom: 30px;
+  font-weight: 300; }
+.weekly-summary .number {
+  font-size: 36px; }
+.weekly-summary i {
+  font-size: 16px;
+  margin-left: 10px; }
+.weekly-summary .percentage {
+  position: relative;
+  top: -7px; }
+.weekly-summary .info-label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: normal; }

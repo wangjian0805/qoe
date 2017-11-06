@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>移动视频业务QoE评测系统</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<!-- VENDOR CSS -->
+	<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="assets/vendor/linearicons/style.css">
+	<link rel="stylesheet" href="assets/vendor/chartist/css/chartist-custom.css">
+	<!-- MAIN CSS -->
+	<link rel="stylesheet" href="assets/css/main.css">
+	<!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
+	<link rel="stylesheet" href="assets/css/demo.css">
+	<!-- GOOGLE FONTS -->
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+	<!-- ICONS -->
+	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+	<!-- MAP -->
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&amp;ak=Ias0W94ywZAj8NswartkEefoFhTG9lnQ"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+
+	<script src="assets/vendor/jquery/jquery.min.js"></script>
+	<script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="assets/vendor/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+	<script src="assets/vendor/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="assets/scripts/klorofil-common.js"></script>
+	<script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
+	<script src="https://img.hcharts.cn/highcharts/highcharts-3d.js"></script>
+	<script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
+	<script src="https://img.hcharts.cn/highcharts/highcharts-more.js"></script>
+	<script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+	<!-- Javascript -->
+	<script src="assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="assets/vendor/chartist/js/chartist.min.js"></script>
+	<!--<script src="assets/scripts/loadmain.js"></script>-->
+	<script type="application/javascript">
+        var up_chart = 0;
+        var down_chart = 0;
+        var memory_chart = 0;
+        var cpu_chart = 0;
+        var score_chart = 0;
+	</script>
+
+</head>
+
+
+<body>
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<!-- NAVBAR -->
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="brand" style="width: 500px;">
+				<a href="index.html"/><span class="span-wangjian" style="width:300px;">移动视频业务QoE评测系统</span>
+			</div>
+			<div class="container-fluid">
+
+				<div class="navbar-btn navbar-btn-right">
+					<a class="btn btn-success update-pro" href="#downloads/klorofil-pro-bootstrap-admin-dashboard-template/?utm_source=klorofil&utm_medium=template&utm_campaign=KlorofilPro" title="Upgrade to Pro" target="_blank"><i class="fa fa-rocket"></i> <span>SHOW</span></a>
+				</div>
+				<div id="navbar-menu">
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
+								<i class="lnr lnr-alarm"></i>
+								<span class="badge bg-danger">2</span>
+							</a>
+							<ul class="dropdown-menu notifications">
+								<li><a href="#" class="notification-item"><span class="dot bg-warning"></span>欢迎使用QoE测量数据展示平台！</a></li>
+								<li><a href="#" class="notification-item"><span class="dot bg-danger"></span>请尽情使用吧~</a></li>
+								<li><a href="#" class="more">查看所有</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="assets/img/user.png" class="img-circle" alt="Avatar"> <span>Lab640</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+							<ul class="dropdown-menu">
+								<li><a href="#"><i class="lnr lnr-user"></i> <span>个人中心</span></a></li>
+								<li><a href="#"><i class="lnr lnr-envelope"></i> <span>我的消息</span></a></li>
+								<li><a href="#"><i class="lnr lnr-cog"></i> <span>设置</span></a></li>
+								<li><a href="#"><i class="lnr lnr-exit"></i> <span>注销</span></a></li>
+							</ul>
+						</li>
+						<!-- <li>
+							<a class="update-pro" href="#downloads/klorofil-pro-bootstrap-admin-dashboard-template/?utm_source=klorofil&utm_medium=template&utm_campaign=KlorofilPro" title="Upgrade to Pro" target="_blank"><i class="fa fa-rocket"></i> <span>UPGRADE TO PRO</span></a>
+						</li> -->
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<!-- END NAVBAR -->
+		<!-- LEFT SIDEBAR -->
+		<div id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">
+						<li><a href="index.html" class="active"><i class="lnr lnr-home"></i> <span>首页</span></a></li>
+						<li>
+							<a href="#subPages" data-toggle="collapse" class="collapsed"><i class="lnr lnr-chart-bars"></i> <span>详情页</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+							<div id="subPages" class="collapse ">
+								<ul class="nav">
+									<li><a href="page-class1.html" class="">数据总览</a></li>
+									<li><a href="page-class2.html" class="">区域详情</a></li>
+								</ul>
+							</div>
+						</li>
+						<li><a href="about.html" class=""><i class="lnr lnr-alarm"></i> <span>关于我们</span></a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+		<!-- END LEFT SIDEBAR -->
+		<!-- MAIN -->
+		<div class="main">
+			<div class="main-content">
+				<div class="container-fluid">
+					<div class="panel panel-profile">
+						<div class="clearfix"></div>
+							<!-- MAIN CONTENT -->
+							<div id="top-container" style="width:100%;height:40px;">
+								<h3 id="index-title" style="align:center;text-align:center;font-family:Microsoft YaHei;">用户本次观看视频的感受<span id="manyi" style="color: red;font-size: 30px;">比较满意</span>，视频播放期间用户感受的波动<span id="bodong" style="color: red;font-size: 30px;">比较平缓</span></h3>
+							</div>
+							<!-- END MAIN CONTENT -->
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<!-- RECENT PURCHASES -->
+							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">参数列表</h3>
+									<div class="right">
+										<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+										<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+									</div>
+								</div>
+								<div class="panel-body no-padding">
+									<table class="table">
+										<thead>
+										<tr>
+											<th>参数名称</th>
+											<th id="valuee">参数值</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr>
+											<td>Mac</td>
+											<td id="mac"></td>
+										</tr>
+										<tr>
+											<td>CPU</td>
+											<td id="cpu"></td>
+										</tr>
+										<tr>
+											<td>屏幕分辨率</td>
+											<td id="screen"></td>
+										</tr>
+										<tr>
+											<td>屏幕高度宽度</td>
+											<td id="hw"></td>
+										</tr>
+										<tr>
+											<td>视频类型</td>
+											<td id="mimeType"></td>
+										</tr>
+										<tr>
+											<td>视频码率</td>
+											<td id="videoStreamBitRate"></td>
+										</tr>
+										<tr>
+											<td>经度</td>
+											<td id="longitude"></td>
+										</tr>
+										<tr>
+											<td>纬度</td>
+											<td id="latitude"></td>
+										</tr>
+										<tr>
+											<td>测量时间</td>
+											<td id="startTime"></td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- END RECENT PURCHASES -->
+						</div>
+						<div class="col-md-8">
+							<!-- RECENT PURCHASES -->
+							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">视频播放过程</h3>
+									<div class="right">
+										<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+										<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+									</div>
+								</div>
+								<div class="row">
+
+								</div>
+								<div class="row">
+									<div class="col-md-9">
+										<div id="score-container" style="width:100%;height: 400px;float:left;"></div>
+									</div>
+									<div class="col-md-1">
+										<br>
+										<div class="weekly-summary ">
+											<span class="number" id="video-len">61</span>
+										</div>
+										<div class="weekly-summary ">
+											<span class="number" id="video-init">1</span>
+										</div>
+										<div class="weekly-summary ">
+											<span class="number" id="video-rbnum">4</span>
+										</div>
+										<div class="weekly-summary ">
+											<span class="number" id="video-rbtime">34</span>
+										</div>
+									</div>
+									<div class="col-md-2">
+										<br>
+										<div class="weekly-summary ">
+											<span class="number"></span>
+											<span class="percentage"><i class="fa fa-caret-up text-success"></i>视频长度</span>
+										</div>
+										<div class="weekly-summary ">
+											<span class="number"></span>
+											<span class="percentage"><i class="fa fa-caret-up text-success"></i>初始时间</span>
+										</div>
+										<div class="weekly-summary ">
+											<span class="number"></span>
+											<span class="percentage"><i class="fa fa-caret-up text-success"></i>停顿次数</span>
+										</div>
+										<div class="weekly-summary ">
+											<span class="number"></span>
+											<span class="percentage"><i class="fa fa-caret-up text-success"></i>停顿时间</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- END RECENT PURCHASES -->
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<!-- RECENT PURCHASES -->
+							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">上传速度</h3>
+									<div class="right">
+										<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+										<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+									</div>
+								</div>
+								<div class="panel-body no-padding">
+									<div id="up-container" style="width:100%;height: 400px;float:left;"></div>
+								</div>
+							</div>
+							<!-- END RECENT PURCHASES -->
+						</div>
+						<div class="col-md-6">
+							<!-- RECENT PURCHASES -->
+							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">下载速度</h3>
+									<div class="right">
+										<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+										<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+									</div>
+								</div>
+								<div class="panel-body no-padding">
+									<div id="down-container" style="width:100%;height: 100%;"></div>
+								</div>
+							</div>
+							<!-- END RECENT PURCHASES -->
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<!-- RECENT PURCHASES -->
+							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">内存消耗</h3>
+									<div class="right">
+										<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+										<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+									</div>
+								</div>
+								<div class="panel-body no-padding">
+									<div id="memory-container" style="width:100%;height: 400px;float:left;"></div>
+								</div>
+							</div>
+							<!-- END RECENT PURCHASES -->
+						</div>
+						<div class="col-md-6">
+							<!-- RECENT PURCHASES -->
+							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">CPU消耗</h3>
+									<div class="right">
+										<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+										<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+									</div>
+								</div>
+								<div class="panel-body no-padding">
+									<div id="delay-container" style="width:100%;height: 100%;"></div>
+								</div>
+							</div>
+							<!-- END RECENT PURCHASES -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- END MAIN -->
+
+		<footer>
+			<div class="container-fluid">
+				<p class="copyright">&copy; 2017 <a href="#" target="_blank">Lab640</a>. All Rights Reserved.</p>
+			</div>
+		</footer>
+	</div>
+	<!-- END WRAPPER -->
+
+
+	<!--视频播放过程中打分-->
+	<script>
+        $(function () {
+            score_chart = new Highcharts.Chart({
+//            $("#score-container").highcharts({
+                chart: {
+                    renderTo:'score-container',
+                    zoomType: 'xy'
+                },
+                title: {
+                    text: null
+                },
+                xAxis: [{
+                    categories: ["1s","2s","3s","4s","5s","6s","7s","8s","9s","10s","11s","12s"],
+                    crosshair: true,
+					title:'点击播放后经过的时间长度（单位:s）'
+                }],
+                yAxis: [{ // Primary yAxis
+                    labels: {
+                        format: '{value} ',
+                        style: {
+                            color: '#000'
+                        }
+                    },
+                    title: {
+                        text: 'Mos值',
+                        style: {
+                            color: '#000'
+                        }
+                    },
+                    opposite: true
+                }, { // Secondary yAxis
+                    gridLineWidth: 0,
+                    title: {
+                        text: '百分比',
+                        style: {
+                            color: '#000'
+                        }
+                    },
+                    labels: {
+                        format: '{value} %',
+                        style: {
+                            color: '#000'
+                        }
+                    }
+                }],
+                tooltip: {
+                    shared: true
+                },
+                series: [{
+                    name: '用户打分Mos值',
+                    type: 'column',
+
+                    data: [0, 0, 0, 0, 5, 0, 0, 0, 0, 3, 0, 0],
+                    tooltip: {
+                        valueSuffix: ' '
+                    }
+                },{
+                    name: '模型计算Mos值',
+                    type: 'column',
+
+                    data: [0, 0, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0],
+                    tooltip: {
+                        valueSuffix: ' '
+                    }
+                },{
+                    name: '播放进度百分比',
+                    type: 'spline',
+                    yAxis: 1,
+                    data: [9.9, 17.5, 26.4, 29.2, 34.0, 36.0, 45.6, 48.5, 51.4, 68.1, 72.6, 84.4],
+                    tooltip: {
+                        valueSuffix: ' '
+                    }
+                }, {
+                    name: '缓冲区缓冲进度百分比',
+                    type: 'spline',
+                    yAxis: 1,
+                    data: [10.9, 18.5, 29.4, 30.2, 44.0, 47.0, 48.6, 58.5, 63.4, 74.1, 80.6, 94.4],
+                    tooltip: {
+                        valueSuffix: ' '
+                    }
+                }]
+            });
+        });
+	</script>
+	<!-- 四个表 -->
+	<script>
+        $(function () {
+            up_chart = new Highcharts.Chart({
+//            $("#score-container").highcharts({
+                chart: {
+                    renderTo:'up-container',
+                    zoomType: 'xy'
+                },
+                title: {
+                    text: null
+                },
+                xAxis: [{
+                    categories: [],
+                    crosshair: true,
+                    title:'点击播放后经过的时间长度（单位:s）'
+                }],
+                yAxis: [{ // Secondary yAxis
+                    gridLineWidth: 0,
+                    title: {
+                        text: '网络速度',
+                        style: {
+                            color: '#000'
+                        }
+                    },
+                    labels: {
+                        format: '{value} kb',
+                        style: {
+                            color: '#000'
+                        }
+                    }
+                }],
+                tooltip: {
+                    shared: true
+                },
+
+                series: [{
+                    name: '网络上传速度',
+                    type: 'spline',
+                    data: [],
+                    tooltip: {
+                        valueSuffix: ' kb'
+                    }
+                }]
+            });
+        });
+	</script>
+	<script>
+        $(function () {
+            down_chart = new Highcharts.Chart({
+//            $("#score-container").highcharts({
+                chart: {
+                    renderTo:'down-container',
+                    zoomType: 'xy'
+                },
+                title: {
+                    text: null
+                },
+                xAxis: [{
+                    categories: [],
+                    crosshair: true,
+                    title:'点击播放后经过的时间长度（单位:s）'
+                }],
+                yAxis: [{ // Secondary yAxis
+                    gridLineWidth: 0,
+                    title: {
+                        text: '网络速度',
+                        style: {
+                            color: '#000'
+                        }
+                    },
+                    labels: {
+                        format: '{value} kb',
+                        style: {
+                            color: '#000'
+                        }
+                    }
+                }],
+                tooltip: {
+                    shared: true
+                },
+                series: [
+                    {
+                        name: '网络下载速度',
+                        type: 'spline',
+                        data: [],
+                        tooltip: {
+                            valueSuffix: ' kb'
+                        }
+                    }
+				]
+            });
+        });
+	</script>
+	<script>
+        $(function () {
+            memory_chart = new Highcharts.Chart({
+//            $("#score-container").highcharts({
+                chart: {
+                    renderTo:'memory-container',
+                    zoomType: 'xy'
+                },
+                title: {
+                    text: null
+                },
+                xAxis: [{
+                    categories: ["1s","2s","3s","4s","5s","6s","7s","8s","9s","10s","11s","12s"],
+                    crosshair: true,
+                    title:'点击播放后经过的时间长度（单位:s）'
+                }],
+                yAxis: [{ // Secondary yAxis
+                    gridLineWidth: 0,
+                    title: {
+                        text: '内存剩余量',
+                        style: {
+                            color: '#000'
+                        }
+                    },
+                    labels: {
+                        format: '{value} %',
+                        style: {
+                            color: '#000'
+                        }
+                    }
+                }],
+                tooltip: {
+                    shared: true
+                },
+                series: [
+                    {
+                        name: '内存剩余量',
+                        type: 'spline',
+                        data: [10.9, 18.5, 29.4, 30.2, 44.0, 47.0, 48.6, 58.5, 63.4, 74.1, 80.6, 94.4],
+                        tooltip: {
+                            valueSuffix: ''
+                        },
+                    }
+				]
+            });
+        });
+	</script>
+	<script>
+        $(function () {
+            cpu_chart = new Highcharts.Chart({
+//            $("#score-container").highcharts({
+                chart: {
+                    renderTo:'delay-container',
+                    zoomType: 'xy'
+                },
+                title: {
+                    text: null
+                },
+                xAxis: [{
+                    categories: ["1s","2s","3s","4s","5s","6s","7s","8s","9s","10s","11s","12s"],
+                    crosshair: true,
+                    title:'点击播放后经过的时间长度（单位:s）'
+                }],
+                yAxis: [{ // Secondary yAxis
+                    gridLineWidth: 0,
+                    title: {
+                        text: 'CPU使用情况',
+                        style: {
+                            color: '#000'
+                        }
+                    },
+                    labels: {
+                        format: '{value} kHz',
+                        style: {
+                            color: '#000'
+                        }
+                    }
+                }],
+                tooltip: {
+                    shared: true
+                },
+                series: [
+                    {
+                        name: '实时CPU使用情况',
+                        type: 'spline',
+                        data: [10.9, 18.5, 29.4, 30.2, 44.0, 47.0, 48.6, 58.5, 63.4, 74.1, 80.6, 94.4],
+                        tooltip: {
+                            valueSuffix: ''
+                        },
+                    }
+				]
+            });
+        });
+	</script>
+	<script type="application/javascript">
+        function getParams(key) {
+            var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) {
+                return unescape(r[2]);
+            }
+            return null;
+        };
+        var mark = getParams("mark");
+        console.info(mark)
+        var remoteUrl = "http://localhost:8080/qoe/api/high/detail?mark="+mark;
+
+        $.ajax({
+            url:remoteUrl,
+            dataType:"json",
+            type:"GET",
+            success:function(response){
+                console.info("kuaidianba")
+                var data = response.data;
+//                console.info($("#mac"))
+                document.getElementById("mac").innerHTML = data.mac
+                document.getElementById("cpu").innerHTML = data.cpu + " kHz"
+                document.getElementById("screen").innerHTML = data.screenPixels + " ppi"
+                document.getElementById("mimeType").innerHTML = data.mimeType
+                document.getElementById("hw").innerHTML = data.height + "*" + data.width
+                document.getElementById("videoStreamBitRate").innerHTML = data.videoStreamBitRate + " bps"
+
+                document.getElementById("longitude").innerHTML = data.longitude
+                document.getElementById("latitude").innerHTML = data.latitude
+                document.getElementById("startTime").innerHTML = data.videoBufferStart
+
+                document.getElementById("video-len").innerHTML = data.videoLength
+                document.getElementById("video-init").innerHTML = data.initTime/1000 + "s"
+				document.getElementById("video-rbnum").innerHTML = data.rebuffNum
+                document.getElementById("video-rbtime").innerHTML = data.rebuffTime/1000 + "s"
+//
+
+                document.getElementById("manyi").innerHTML = data.manyi
+                document.getElementById("bodong").innerHTML = data.bodong
+
+//                document.getElementById("scoreTime").innerHTML = data.scoreTime
+//                document.getElementById("maxScore").innerHTML = data.maxScore
+//                document.getElementById("minScore").innerHTML = data.minScore
+//                document.getElementById("avgScore").innerHTML = data.avgScore
+//                document.getElementById("variance").innerHTML = data.variance
+                score_chart.xAxis[0].categories = data.xAxis
+                score_chart.series[0].setData(data.subScore)
+                score_chart.series[1].setData(data.objScore)
+                score_chart.series[2].setData(data.playPercentage)
+                score_chart.series[3].setData(data.bufferPercentage)
+
+                up_chart.xAxis[0].categories = data.xAxis
+                up_chart.series[0].setData(data.sendSpeed)
+
+                down_chart.xAxis[0].categories = data.xAxis
+                down_chart.series[0].setData(data.netSpeed)
+
+                memory_chart.xAxis[0].categories = data.xAxis
+                memory_chart.series[0].setData(data.memoryConsumption)
+
+                cpu_chart.xAxis[0].categories = data.xAxis
+                cpu_chart.series[0].setData(data.currentCPU)
+            }
+        });
+	</script>
+
+</body>
+
+</html>

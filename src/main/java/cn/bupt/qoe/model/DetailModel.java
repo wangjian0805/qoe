@@ -1,5 +1,8 @@
 package cn.bupt.qoe.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,7 +18,8 @@ public class DetailModel {
     private Double videoStreamBitRate;
     private Integer videoLength;
     private Long initTime;
-    private Long videoBufferStart;
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date videoBufferStart;
     private Integer scoreTime;
     private Double maxScore;
     private Double minScore;
@@ -23,6 +27,12 @@ public class DetailModel {
     private Double variance;
     private Double longitude;
     private Double latitude;
+    private Integer rebuffNum;
+    private Long rebuffTime;
+
+    private String manyi;
+    private String bodong;
+
     private List<String> xAxis;
     private List<Double> objScore;
     private List<Double> subScore;
@@ -33,6 +43,7 @@ public class DetailModel {
     private List<Double> sendSpeed;
     private List<Double> netSpeed;
     private List<Double> memoryConsumption;
+    private List<Double> currentCPU;
 
     public String getMac() {
         return mac;
@@ -106,11 +117,11 @@ public class DetailModel {
         this.initTime = initTime;
     }
 
-    public Long getVideoBufferStart() {
+    public Date getVideoBufferStart() {
         return videoBufferStart;
     }
 
-    public void setVideoBufferStart(Long videoBufferStart) {
+    public void setVideoBufferStart(Date videoBufferStart) {
         this.videoBufferStart = videoBufferStart;
     }
 
@@ -241,6 +252,47 @@ public class DetailModel {
 
     public void setPlayPercentage(List<Double> playPercentage) {
         this.playPercentage = playPercentage;
+    }
+
+    public List<Double> getCurrentCPU() {
+        return currentCPU;
+    }
+
+    public void setCurrentCPU(List<Double> currentCPU) {
+        this.currentCPU = currentCPU;
+    }
+
+
+    public Integer getRebuffNum() {
+        return rebuffNum;
+    }
+
+    public void setRebuffNum(Integer rebuffNum) {
+        this.rebuffNum = rebuffNum;
+    }
+
+    public Long getRebuffTime() {
+        return rebuffTime;
+    }
+
+    public void setRebuffTime(Long rebuffTime) {
+        this.rebuffTime = rebuffTime;
+    }
+
+    public String getManyi() {
+        return manyi;
+    }
+
+    public void setManyi(String manyi) {
+        this.manyi = manyi;
+    }
+
+    public String getBodong() {
+        return bodong;
+    }
+
+    public void setBodong(String bodong) {
+        this.bodong = bodong;
     }
 
     @Override

@@ -8,11 +8,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 	<!-- VENDOR CSS -->
 	<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-tour.min.css">
+	<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="assets/vendor/linearicons/style.css">
 	<link rel="stylesheet" href="assets/vendor/chartist/css/chartist-custom.css">
-	<!-- MAIN CSS -->
+	<!-- MAIN AND TULI CSS -->
 	<link rel="stylesheet" href="assets/css/main.css">
+	<link rel="stylesheet" href="assets/css/tuli.css">
 	<!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
 	<link rel="stylesheet" href="assets/css/demo.css">
 	<!-- GOOGLE FONTS -->
@@ -20,12 +23,256 @@
 	<!-- ICONS -->
 	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
 	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+	
+	
+</head>
+
+
+<body onload="initpage();" >
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<!-- NAVBAR -->
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="brand" style="width: 500px;">
+				<a href=""/><span class="span-wangjian" style="width:300px;">移动视频业务QoE评测系统</span>
+			</div>
+			<div class="container-fluid">
+				<div class="navbar-btn navbar-btn-right">
+					<a class="btn btn-success update-pro" title="Upgrade to Pro" target="_blank" data-demo><i class="glyphicon glyphicon-question-sign"></i> <span>GUIDE</span></a>
+				</div>
+				<div id="navbar-menu">
+				</div>
+			</div>
+		</nav>
+		<!-- END NAVBAR -->
+		<!-- LEFT SIDEBAR -->
+		<div id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">
+						<li id="indexpage"><a href="index.html" class="active"><i class="lnr lnr-home"></i> <span>首页</span></a></li>
+						<li><a href="page-class1.html" class=""><i class="lnr lnr-chart-bars"></i><span>数据总览</span></a></li>
+						<li><a href="about.html" class=""><i class="lnr lnr-alarm"></i> <span>关于我们</span></a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+		<!-- END LEFT SIDEBAR -->
+		<!-- MAIN -->
+		<div class="main">
+			<div class="row whole-content">
+				<div class="main-content col-md-9" > 	
+					<div class="panel panel-profile ">
+						<!-- MAIN CONTENT -->
+						<div class="panel-heading">
+							<h3 class="panel-title">北邮校园Mos值分布热图</h3>
+						</div>
+						<div class="panel-body" >
+							<div id="baidumap" style="min-height:900px;"></div>
+							<div id="tuli">
+								<div class="legend-text">MoS热力图例：</div>
+								<a class="legend-item legend-1">非常差：1
+									<div class="legend-item-wrapper">
+										<div class="legend-item-tip">
+											&nbsp;&nbsp;非常差：卡得根本无法观看视频&nbsp;&nbsp;
+										</div>
+									</div>
+								</a> 
+								<a class="legend-item legend-2">差：2
+									<div class="legend-item-wrapper">
+										<div class="legend-item-tip">
+											&nbsp;&nbsp;差：经常卡顿，影响视频观看 &nbsp;&nbsp;
+										</div>
+									</div>
+								</a> 
+								<a class="legend-item legend-3">一般：3
+									<div class="legend-item-wrapper">
+										<div class="legend-item-tip">
+											&nbsp;&nbsp;一般：时而卡顿 &nbsp;&nbsp;
+										</div>
+									</div>
+								</a> 
+								<a class="legend-item legend-4" >较好：4
+									<div class="legend-item-wrapper">
+										<div class="legend-item-tip">
+											&nbsp;&nbsp;较好：几乎不卡顿，可以接受的视频观看体验 &nbsp;&nbsp;
+										</div>
+									</div>
+								</a> 
+								<a class="legend-item legend-5" >完美：5
+									<div class="legend-item-wrapper">
+										<div class="legend-item-tip">
+											&nbsp;&nbsp;完美： 视频播放流畅，完全感觉不到卡顿&nbsp;&nbsp;
+										</div>
+									</div>
+								</a>
+							</div>		
+						</div>	
+								
+						
+						<!-- END MAIN CONTENT -->
+					</div>
+				</div>
+				<div class="second-content col-md-3">
+					<div class="panel panel-profile" >
+						<div class="panel-heading">
+							<h3 class="panel-title">热图信息</h3>
+							<div class="right">
+								<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+								<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+							</div>
+						</div>
+						<div id="mapinfo" class="row panel-body" >
+							<div calss="panel-body" style="min-height:220px;">
+								<div id="mapinfo-left" class="col-md-6" >
+									<div class="text-left mapinfo-summary">
+										<span class="number"  id="info-mosNum">0</span> 
+										<span class="info-label">热点数量</span>
+									</div>
+									<div class="text-left mapinfo-summary">
+										<span class="number"  id="info-mosAvg">0</span> 
+										<span class="info-label">平均MoS</span>
+									</div>
+									</div>
+								<div id="mapinfo-right" class="col-md-6">
+									<div class="text-left mapinfo-summary">
+										<span class="number" id="info-mosMax">0</span> 
+										<span class="info-label" >最大MoS</span>
+									</div>
+									<div class="text-left mapinfo-summary">
+										<span class="number"  id="info-mosMin">0</span> 
+										<span class="info-label">最小MoS</span>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+						
+					</div>
+					
+					<div class="panel panel-profile" >
+						<div class="panel-heading">
+							<h3 class="panel-title">热图设置</h3>
+							<div class="right">
+								<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+								<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+							</div>
+						</div>
+						<div id="mapoperator" class="panel-body" > 
+							
+							<form class="form-horizontal" id="operatorform">
+								<fieldset>
+							       	
+						          	<div class="form-group">
+						          		<div class="col-sm-4" style="transform:translateY(25%);">
+						          			<span class="info-label ">起始时间</span>
+						          		</div>
+							          	<div class="col-sm-8">
+							          		<!-- Select Time -->
+									  		<input size="6" type="text" value="2017-09-15" readonly class="form_datetime form-control col-sm-4" id="timeStart">
+							          	</div>
+							         </div>
+							         
+							         <div class="form-group">
+							         	<div class="col-sm-4" style="transform:translateY(25%);"> 
+						          			<span class="info-label ">结束时间</span>
+						          		</div>
+							          	<div class="col-sm-8">
+							          		<!-- Select Time -->
+								            <input size="6" type="text" value="" readonly class="form_datetime form-control col-sm-4" id="timeStop">  
+							          	</div>
+							         </div>
+							         
+							         <div class="form-group">
+							         	<div class="col-sm-4" style="transform:translateY(25%);">
+							         		<span class="info-label ">最小MoS</span>
+							         	</div>
+							          	<div class="col-sm-8">
+							          		<!-- Select MOS -->
+							          		<select class="form-control" id="mosMin">
+										      <option selected="selected">1</option>
+										      <option>2</option>
+										      <option>3</option>
+										      <option>4</option>
+										      <option>5</option>
+									    	</select>
+									    	
+							          	</div> 
+						          	</div>
+						          	
+						          	<div class="form-group">
+							         	<div class="col-sm-4" style="transform:translateY(25%);">
+							         		<span class="info-label ">最大MoS</span>
+							         	</div>
+							          	<div class="col-sm-8">
+								            <select class="form-control" id="mosMax">
+										      <option>1</option>
+										      <option>2</option>
+										      <option>3</option>
+										      <option>4</option>
+										      <option selected="selected">5</option>
+										    </select>
+							          	</div> 
+						          	</div>
+						          	
+						          	<div class="form-group">
+						          		<div class="col-sm-4" style="transform:translateY(25%);">
+							         		<span class="info-label ">热点半径</span>
+							         	</div>
+						         		<div class="col-sm-6" style="margin-top:4px">
+						          			<input type="range" value="" min="10" max="35" step="5" class="" id="radius">  
+							          	</div>
+							          	<div style="margin-top:4px">
+							          		<span id="radiusvalue"  style="margin:4px;">25</span>
+							          	</div>  
+						          	</div>
+						          	
+						          	<div class="form-group">
+						          		<div class="col-sm-4" >
+						          			<span class="info-label ">防重叠</span>
+						          		</div>
+							          	<div class="col-sm-8">
+							          		<label class="fancy-checkbox " >
+							          			<input type="checkbox" checked="checked" id="againstHeaviness">
+							          			<span></span>
+							     
+							          		</label>
+							          	</div>
+						          	</div>
+							        <div class="form-group">
+										<div class="col-sm-offset-5 col-sm-7">
+								        	<!-- Button -->
+								        	<div class="btn-group btn-group-sm">
+									            <button class="btn" onclick="resetOperations();">重置</button>
+									            <button class="btn" onclick="reCreateHeatMap();">生成</button>
+								          	</div> 
+								          	
+								        </div>
+							   		</div>
+								</fieldset>	
+							</form>					          
+						</div>
+					</div>
+				</div>
+			</div>			
+		</div>
+		<!-- END MAIN -->
+		
+		<footer>
+			<div class="container-fluid">
+				<p class="copyright">&copy; 2017 <a href="#" target="_blank">Lab640</a>. All Rights Reserved.</p>
+			</div>
+		</footer>
+	</div>
+	<!-- END WRAPPER -->
+
 	<!-- MAP -->
 	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&amp;ak=Ias0W94ywZAj8NswartkEefoFhTG9lnQ"></script>
 	<script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
-
+	<!-- Javascript -->
 	<script src="assets/vendor/jquery/jquery.min.js"></script>
 	<script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="assets/vendor/bootstrap/js/bootstrap-tour.min.js"></script>
 	<script src="assets/vendor/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
 	<script src="assets/vendor/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
 	<script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
@@ -36,528 +283,13 @@
 	<script src="https://img.hcharts.cn/highcharts/highcharts-more.js"></script>
 	<script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
 	<script src="https://img.hcharts.cn/highcharts/themes/sand-signika.js"></script>
-	<!-- Javascript -->
+	
 	<script src="assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
 	<script src="assets/vendor/chartist/js/chartist.min.js"></script>
-	<!--<script src="assets/scripts/loadmain.js"></script>-->
-
-	<script type="application/javascript">
-        var net_chart = 0;
-        var score_chart = 0;
-	</script>
-
-	<script type="application/javascript">
-        function showMapData(){
-
-            if(!isSupportCanvas){
-                alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~');
-                return;
-            }
-            var map = new BMap.Map("baidumap");          // 创建地图实例
-            var point = new BMap.Point(116.364549,39.968112);
-            map.centerAndZoom(point, 18); // 初始化地图，设置中心点坐标和地图级别
-            //map.enableScrollWheelZoom(); // 允许滚轮缩放
-			map.disableDragging();     //禁止拖拽
-            var myIcon1 =new BMap.Icon("assets/img/transparent.png", new BMap.Size(10, 10), {imageOffset: new BMap.Size(0, 0)});
-            var myShadowIcon = new BMap.Icon("assets/img/transparent.png", new BMap.Size(10, 10), {imageOffset: new BMap.Size(0, 0)});
-
-            var points  = [];
-            heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":30,"blur":1,"gradient":{0.2:'#33FF33',0.4:'#99FF1A',0.6:'#FFFF00',0.8:'#FF8000',1:'#FF0000'}});
-            map.addOverlay(heatmapOverlay);
-            $.ajax({
-                url:"http://localhost:58080/qoe/api/high/map",
-                dataType:"json",
-                type:"GET",
-                success:function(response){
-                    var data = response.data;
-                    // heatmapOverlay.setDataSet({data:points,max:5});
-                    var point;
-                    var marker;
-                    for(var i=0;i<data.length;i++){
-                        point=data[i]
-                        points[i]=point;
-                        // 为每个点添加标注marker
-                        marker = new BMap.Marker(new BMap.Point(point.lng,point.lat));
-                        marker.setIcon(myIcon1);
-                        marker.setShadow(myShadowIcon);
-                        map.addOverlay(marker);
-                        var mac_time = data[i].mark;
-                        showInfo(point.count,marker,mac_time);
-                    }
-                    map.addOverlay(heatmapOverlay);
-                    heatmapOverlay.setDataSet({data:points,max:500});
-                }, error: function() {}
-            });
-            heatmapOverlay.show();
-        }
-        //	为每个marker设置监听
-        function showInfo(content,marker,mac_time){
-            console.log("content:  "+content);
-            var contentt = "体验指数："+content+"";
-            var opts = {
-                width : 0,     // 信息窗口宽度
-                height: 0,		// 信息窗口高度
-                enableMessage:false
-            };
-            var infowindow = new BMap.InfoWindow(contentt,opts);
-            marker.addEventListener("mouseover",function(){
-                this.openInfoWindow(infowindow);
-            });
-            marker.addEventListener("mouseout",function(e){
-                this.closeInfoWindow(infowindow);
-            });
-            marker.addEventListener("click",function(e){
-                console.info("点击了热图")
-                console.info("点击的这个点是"+mac_time)
-                document.getElementById("index-title").innerHTML = "本次测量获取参数的详细展示";
-                $("#baidumap").hide();
-                var remoteUrl = "http://localhost:58080/qoe/api/high/detail?mark="+mac_time;
-                $.ajax({
-                    url:remoteUrl,
-                    dataType:"json",
-                    type:"GET",
-                    success:function(response){
-                        var data = response.data;
-                        console.info($("#mac"))
-						document.getElementById("mac").innerHTML = data.mac
-                        document.getElementById("cpu").innerHTML = data.cpu
-                        document.getElementById("screen").innerHTML = data.screenPixels
-                        document.getElementById("mimeType").innerHTML = data.mimeType
-                        document.getElementById("hhh").innerHTML = data.height
-                        document.getElementById("www").innerHTML = data.width
-                        document.getElementById("videoStreamBitRate").innerHTML = data.videoStreamBitRate
-                        document.getElementById("videoLength").innerHTML = data.videoLength
-                        document.getElementById("initTime").innerHTML = data.initTime
-                        document.getElementById("startTime").innerHTML = data.videoBufferStart
-                        document.getElementById("longitude").innerHTML = data.longitude
-                        document.getElementById("latitude").innerHTML = data.latitude
-                        document.getElementById("scoreTime").innerHTML = data.scoreTime
-                        document.getElementById("maxScore").innerHTML = data.maxScore
-                        document.getElementById("minScore").innerHTML = data.minScore
-                        document.getElementById("avgScore").innerHTML = data.avgScore
-                        document.getElementById("variance").innerHTML = data.variance
-                        document.getElementById("red").innerHTML = data.scoreTime
-
-
-                        score_chart.xAxis[0].categories = data.xAxis
-                        score_chart.series[0].setData(data.subScore)
-                        score_chart.series[1].setData(data.objScore)
-                        score_chart.series[2].setData(data.playPercentage)
-                        score_chart.series[3].setData(data.bufferPercentage)
-                        score_chart.series[4].setData(data.memoryConsumption)
-
-                        net_chart.xAxis[0].categories = data.xAxis
-                        net_chart.series[0].setData(data.subScore)
-                        net_chart.series[1].setData(data.objScore)
-                        net_chart.series[2].setData(data.sendSpeed)
-                        net_chart.series[3].setData(data.netSpeed)
-                    }
-                });
-                $("#detail-container").show();
-            });
-
-        }
-        //是否显示热力图
-        function openHeatmap(){
-            heatmapOverlay.show();
-        }
-        function closeHeatmap(){
-            heatmapOverlay.hide();
-        }
-
-        //判断浏览区是否支持canvas
-        function isSupportCanvas(){
-            var elem = document.createElement('canvas');
-            return !!(elem.getContext && elem.getContext('2d'));
-        }
-
-        function showChartData(){
-            //清空显示区
-            $('#baidumap').empty();
-            $('#baidumap').css({"background-color":""});
-        }
-
-	</script>
-</head>
-
-
-<body onload="showMapData();">
-	<!-- WRAPPER -->
-	<div id="wrapper">
-		<!-- NAVBAR -->
-		<nav class="navbar navbar-default navbar-fixed-top">
-			<div class="brand" style="width: 500px;">
-				<a href="index.html"/><span class="span-wangjian" style="width:300px;">移动视频业务QoE评测系统</span>
-			</div>
-			<div class="container-fluid">
-
-				<div class="navbar-btn navbar-btn-right">
-					<a class="btn btn-success update-pro" href="#downloads/klorofil-pro-bootstrap-admin-dashboard-template/?utm_source=klorofil&utm_medium=template&utm_campaign=KlorofilPro" title="Upgrade to Pro" target="_blank"><i class="fa fa-rocket"></i> <span>SHOW</span></a>
-				</div>
-				<div id="navbar-menu">
-					<ul class="nav navbar-nav navbar-right">
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
-								<i class="lnr lnr-alarm"></i>
-								<span class="badge bg-danger">2</span>
-							</a>
-							<ul class="dropdown-menu notifications">
-								<li><a href="#" class="notification-item"><span class="dot bg-warning"></span>欢迎使用QoE测量数据展示平台！</a></li>
-								<li><a href="#" class="notification-item"><span class="dot bg-danger"></span>请尽情使用吧~</a></li>
-								<li><a href="#" class="more">查看所有</a></li>
-							</ul>
-						</li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="assets/img/user.png" class="img-circle" alt="Avatar"> <span>Lab640</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
-							<ul class="dropdown-menu">
-								<li><a href="#"><i class="lnr lnr-user"></i> <span>个人中心</span></a></li>
-								<li><a href="#"><i class="lnr lnr-envelope"></i> <span>我的消息</span></a></li>
-								<li><a href="#"><i class="lnr lnr-cog"></i> <span>设置</span></a></li>
-								<li><a href="#"><i class="lnr lnr-exit"></i> <span>注销</span></a></li>
-							</ul>
-						</li>
-						<!-- <li>
-							<a class="update-pro" href="#downloads/klorofil-pro-bootstrap-admin-dashboard-template/?utm_source=klorofil&utm_medium=template&utm_campaign=KlorofilPro" title="Upgrade to Pro" target="_blank"><i class="fa fa-rocket"></i> <span>UPGRADE TO PRO</span></a>
-						</li> -->
-					</ul>
-				</div>
-			</div>
-		</nav>
-		<!-- END NAVBAR -->
-		<!-- LEFT SIDEBAR -->
-		<div id="sidebar-nav" class="sidebar">
-			<div class="sidebar-scroll">
-				<nav>
-					<ul class="nav">
-						<li><a href="index.html" class="active"><i class="lnr lnr-home"></i> <span>首页</span></a></li>
-						<li>
-							<a href="#subPages" data-toggle="collapse" class="collapsed"><i class="lnr lnr-chart-bars"></i> <span>详情页</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
-							<div id="subPages" class="collapse ">
-								<ul class="nav">
-									<li><a href="page-class1.html" class="">数据总览</a></li>
-									<li><a href="page-class2.html" class="">区域详情</a></li>
-								</ul>
-							</div>
-						</li>
-						<li><a href="about.html" class=""><i class="lnr lnr-alarm"></i> <span>关于我们</span></a></li>
-					</ul>
-				</nav>
-			</div>
-		</div>
-		<!-- END LEFT SIDEBAR -->
-		<!-- MAIN -->
-		<div class="main">
-			<div class="main-content">
-				<div class="container-fluid">
-					<div class="panel panel-profile">
-						<div class="clearfix"></div>
-							<!-- MAIN CONTENT -->
-							<div id="top-container" style="width:100%;height:60px;">
-								<h1 id="index-title" style="align:center;text-align:center;font-family:Microsoft YaHei;">北邮校园Mos值分布热图</h1>
-							</div>
-							<div id="baidumap" style="min-height:900px;"></div>
-							<div id="detail-container" style="width:100%;display:none;float: left;" >
-								<!--<div id="dtop-container" style="width:100%;height:60px;">-->
-									<!--<h1 style="align:center;text-align:center;font-family:Microsoft YaHei;">本次测量获取参数的详细展示</h1>-->
-								<!--</div>-->
-								<table id="static-table" class="table table-condensed table-hover" style="width:100%;">
-									<tr>
-										<th>参数名称</th>
-										<th id="valuee">参数值</th>
-									</tr>
-									<tr>
-										<td>Mac</td>
-										<td id="mac"></td>
-									</tr>
-									<tr>
-										<td>Cpu(kHz)</td>
-										<td id="cpu"></td>
-									</tr>
-									<tr>
-										<td>屏幕分辨率(ppi)</td>
-										<td id="screen"></td>
-									</tr>
-									<tr>
-										<td>视频类型</td>
-										<td id="mimeType"></td>
-									</tr>
-									<tr>
-										<td>视频清晰度-高度</td>
-										<td id="hhh"></td>
-									</tr>
-									<tr>
-										<td>视频清晰度-宽度</td>
-										<td id="www"></td>
-									</tr>
-									<tr>
-										<td>视频码率(bps)</td>
-										<td id="videoStreamBitRate"></td>
-									</tr>
-									<tr>
-										<td>视频长度(s)</td>
-										<td id="videoLength"></td>
-									</tr>
-									<tr>
-										<td>初始化时间(ms)</td>
-										<td id="initTime"></td>
-									</tr>
-									<tr>
-										<td>测量开始时间戳</td>
-										<td id="startTime"></td>
-									</tr>
-									<tr>
-										<td>本次测量位置经度</td>
-										<td id="latitude"></td>
-									</tr>
-									<tr>
-										<td>本次测量位置纬度</td>
-										<td id="longitude"></td>
-									</tr>
-									<tr>
-										<td>本次视频播放中的测量次数</td>
-										<td id="scoreTime"></td>
-									</tr>
-									<tr>
-										<td>本次视频播放中的最大Mos值</td>
-										<td id="maxScore"></td>
-									</tr>
-									<tr>
-										<td>本次视频播放中的最小Mos值</td>
-										<td id="minScore"></td>
-									</tr>
-									<tr>
-										<td>本次视频播放中的平均Mos值</td>
-										<td id="avgScore"></td>
-									</tr>
-									<tr>
-										<td>本次视频播放中的打分方差</td>
-										<td id="variance"></td>
-									</tr>
-
-								</table>
-								<h3 style="align:top;text-align:center;font-family:Microsoft YaHei;float:left;width: 100%;">本次视频播放用户打分次数为：<button id="red" type="button" class="btn btn-danger btn-toastr" data-context="error" data-message="This is warning info" data-position="top-right">7</button>&nbsp;次</h3>
-
-								<div id="score-container" style="width:100%;height: 400px;float:left;"></div>
-								<div id="net-container" style="width:100%;height: 400px;float:left;"></div>
-
-							</div>
-							<!-- END MAIN CONTENT -->
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- END MAIN -->
-
-		<footer>
-			<div class="container-fluid">
-				<p class="copyright">&copy; 2017 <a href="#" target="_blank">Lab640</a>. All Rights Reserved.</p>
-			</div>
-		</footer>
-	</div>
-	<!-- END WRAPPER -->
-
-
-	<!--视频播放过程中打分-->
-	<script>
-        $(function () {
-            score_chart = new Highcharts.Chart({
-//            $("#score-container").highcharts({
-                chart: {
-                    renderTo:'score-container',
-                    zoomType: 'xy'
-                },
-                title: {
-                    text: '视频播放过程中网络打分情况'
-                },
-                subtitle: {
-                    text: 'QoE平台'
-                },
-                xAxis: [{
-                    categories: ["1s","2s","3s","4s","5s","6s","7s","8s","9s","10s","11s","12s"],
-                    crosshair: true,
-					title:'点击播放后经过的时间长度（单位:s）'
-                }],
-                yAxis: [{ // Primary yAxis
-                    labels: {
-                        format: '{value} ',
-                        style: {
-                            color: '#000'
-                        }
-                    },
-                    title: {
-                        text: 'Mos值',
-                        style: {
-                            color: '#000'
-                        }
-                    },
-                    opposite: true
-                }, { // Secondary yAxis
-                    gridLineWidth: 0,
-                    title: {
-                        text: '百分比',
-                        style: {
-                            color: '#000'
-                        }
-                    },
-                    labels: {
-                        format: '{value} %',
-                        style: {
-                            color: '#000'
-                        }
-                    }
-                }],
-                tooltip: {
-                    shared: true
-                },
-                legend: {
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'middle',
-					borderWidth:0,
-                    backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
-                },
-                series: [{
-                    name: '用户打分Mos值',
-                    type: 'column',
-
-                    data: [0, 0, 0, 0, 5, 0, 0, 0, 0, 3, 0, 0],
-                    tooltip: {
-                        valueSuffix: ' '
-                    }
-                },{
-                    name: '模型计算Mos值',
-                    type: 'column',
-
-                    data: [0, 0, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0],
-                    tooltip: {
-                        valueSuffix: ' '
-                    }
-                },{
-                    name: '播放进度百分比',
-                    type: 'spline',
-                    yAxis: 1,
-                    data: [9.9, 17.5, 26.4, 29.2, 34.0, 36.0, 45.6, 48.5, 51.4, 68.1, 72.6, 84.4],
-                    tooltip: {
-                        valueSuffix: ' '
-                    }
-                }, {
-                    name: '缓冲区缓冲进度百分比',
-                    type: 'spline',
-                    yAxis: 1,
-                    data: [10.9, 18.5, 29.4, 30.2, 44.0, 47.0, 48.6, 58.5, 63.4, 74.1, 80.6, 94.4],
-                    tooltip: {
-                        valueSuffix: ' '
-                    }
-                },{
-                    name: '内存剩余量',
-                    type: 'spline',
-                    yAxis: 1,
-                    data: [10.9, 18.5, 29.4, 30.2, 44.0, 47.0, 48.6, 58.5, 63.4, 74.1, 80.6, 94.4],
-                    tooltip: {
-                        valueSuffix: ' %'
-                    },
-					visible:false
-                }]
-            });
-        });
-	</script>
-
-	<script>
-        $(function () {
-            net_chart = new Highcharts.Chart({
-//            $("#score-container").highcharts({
-                chart: {
-                    renderTo:'net-container',
-                    zoomType: 'xy'
-                },
-                title: {
-                    text: '视频播放过程中网络打分情况'
-                },
-                subtitle: {
-                    text: 'QoE平台'
-                },
-                xAxis: [{
-                    categories: ["1s","2s","3s","4s","5s","6s","7s","8s","9s","10s","11s","12s"],
-                    crosshair: true,
-                    title:'点击播放后经过的时间长度（单位:s）'
-                }],
-                yAxis: [{ // Primary yAxis
-                    labels: {
-                        format: '{value} ',
-                        style: {
-                            color: '#000'
-                        }
-                    },
-                    title: {
-                        text: 'Mos值',
-                        style: {
-                            color: '#000'
-                        }
-                    },
-                    opposite: true
-                }, { // Secondary yAxis
-                    gridLineWidth: 0,
-                    title: {
-                        text: '网络速度',
-                        style: {
-                            color: '#000'
-                        }
-                    },
-                    labels: {
-                        format: '{value} kb',
-                        style: {
-                            color: '#000'
-                        }
-                    }
-                }],
-                tooltip: {
-                    shared: true
-                },
-                legend: {
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'middle',
-                    borderWidth:0,
-                    backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
-                },
-                series: [{
-                    name: '用户打分Mos值',
-                    type: 'column',
-
-                    data: [0, 0, 0, 0, 5, 0, 0, 0, 0, 3, 0, 0],
-                    tooltip: {
-                        valueSuffix: ' '
-                    },
-                    visible:false
-                },{
-                    name: '模型计算Mos值',
-                    type: 'column',
-
-                    data: [0, 0, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0],
-                    tooltip: {
-                        valueSuffix: ' '
-                    },
-                    visible:false
-                },{
-                    name: '网络上传速度',
-                    type: 'spline',
-                    yAxis: 1,
-                    data: [10.9, 18.5, 29.4, 30.2, 44.0, 47.0, 48.6, 58.5, 63.4, 74.1, 80.6, 94.4],
-                    tooltip: {
-                        valueSuffix: ' kb'
-                    }
-                },{
-                    name: '网络下载速度',
-                    type: 'spline',
-                    yAxis: 1,
-                    data: [10.9, 18.5, 29.4, 30.2, 44.0, 47.0, 48.6, 58.5, 63.4, 74.1, 80.6, 94.4],
-                    tooltip: {
-                        valueSuffix: ' kb'
-                    }
-                }]
-            });
-        });
-	</script>
+	<!-- 各页面js -->
+	<script src="assets/scripts/index.js"></script>
+	<!-- 页面引导 JavaScript -->
+	<script src="assets/scripts/guide.js"></script>
 </body>
 
 </html>

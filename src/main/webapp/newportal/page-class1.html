@@ -30,20 +30,24 @@
 	<script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
 	<script src="https://img.hcharts.cn/highcharts/highcharts-more.js"></script>
 	<script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
-	<script src="https://img.hcharts.cn/highcharts/themes/sand-signika.js"></script>
+	<!--<script src="https://img.hcharts.cn/highcharts/themes/sand-signika.js"></script>-->
 
 	<link href="assets/vendor/bootstrap/css/bootstrap-table.css" rel="stylesheet">
+	<link href="assets/css/building.css" rel="stylesheet">
 	<script src="assets/vendor/bootstrap/js/bootstrap-table.js"></script>
 
 	<script type="application/javascript">
         $.ajax({
-            url:"http://localhost:8080/qoe/api/high/stastic",
+            url:"http://10.103.93.23:8080/qoe/api/high/stastic",
             dataType:"json",
             type:"GET",
             success:function(response){
                 var data = response.data;
-                $("#test-num").html(data[0])
-				$("#mac-num").html(data[1])
+                document.getElementById("measure-num").innerHTML = data[0]
+                document.getElementById("mac-num").innerHTML = data[1]
+                document.getElementById("play-num").innerHTML = data[2]
+                document.getElementById("play-time").innerHTML = data[3] + "s"
+
             }
         });
 	</script>
@@ -64,6 +68,45 @@
             return fmt;
         }
 	</script>
+	<script type="application/javascript">
+        $(function(){
+            $("#buildingSelect").change(function() {
+                console.log("change");
+                console.log("buildingSelect index: "+this.selectedIndex);
+                $("#buildingImg").attr("src","assets/img/building"+(this.selectedIndex +1) +".jpg");
+                $("#buildingIntroduction").html(this.options[this.selectedIndex].text);
+                var building = this.options[this.selectedIndex].text
+                $.ajax({
+                    url:"http://10.103.93.23:8080/qoe/api/high/osCompareByBuilding?building="+building,
+                    dataType:"json",
+                    type:"GET",
+                    success:function(response){
+                        var data = response.data;
+                        td_chart.xAxis.categories = data[0]
+                        td_chart.series[0].setData(data[1])
+                        td_chart.series[1].setData(data[2])
+                    }
+                });
+            });
+        })
+        function changeChart(btn) {
+            var obj = $(btn);
+            var building = obj.attr("value");
+
+            $.ajax({
+                url:"http://10.103.93.23:8080/qoe/api/high/osCompareByBuilding?building="+building,
+                dataType:"json",
+                type:"GET",
+                success:function(response){
+                    var data = response.data;
+                    td_chart.xAxis.categories = data[0]
+                    td_chart.series[0].setData(data[1])
+                    td_chart.series[1].setData(data[2])
+                }
+            });
+
+        }
+	</script>
 </head>
 
 <body>
@@ -74,6 +117,7 @@
 			<div class="brand" style="width: 500px;">
 				<a href="index.html"/><span class="span-wangjian" style="width:300px;">移动视频业务QoE评测系统</span>
 			</div>
+
 			<div class="container-fluid">
 
 				<div class="navbar-btn navbar-btn-right">
@@ -115,15 +159,7 @@
 				<nav>
 					<ul class="nav">
 						<li><a href="index.html" class=""><i class="lnr lnr-home"></i> <span>首页</span></a></li>
-						<li>
-							<a href="#subPages" data-toggle="collapse" class="active"><i class="lnr lnr-chart-bars"></i> <span>详情页</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
-							<div id="subPages" class="collapse in">
-								<ul class="nav">
-									<li><a href="page-class1.html" class="active">数据总览</a></li>
-									<li><a href="page-class2.html" class="">区域详情</a></li>
-								</ul>
-							</div>
-						</li>
+						<li><a href="page-class1.html" class=""><i class="lnr lnr-chart-bars"></i><span>数据总览</span></a></li>
 						<li><a href="about.html" class=""><i class="lnr lnr-alarm"></i> <span>关于我们</span></a></li>
 					</ul>
 				</nav>
@@ -135,24 +171,185 @@
 			<!-- MAIN CONTENT -->
 			<div class="main-content">
 				<div class="container-fluid">
-					<div class="panel panel-profile">
-						<div class="clearfix">
-							<div id="top-container" style="width:100%;height:80px;">
-								<h1 style="align:center;text-align:center;font-family:Microsoft YaHei;">OverView</h1>
-							</div>
-							<div id="num-container" style="width:100%;height: 120px;float:left">
-								<div class="intop-1" style="width:50%;height:100%;float:left">
-									<button type="button" class="btn btn-primary btn-toastr" data-context="info" data-message="This is general theme info" data-position="top-right" style="margin-left: 35%;">总监测次数</button>
-									<h1 id="test-num" style="align:center;text-align:center;font-family:Microsoft YaHei;font-size: 60px;">0</h1>
+					<div class="panel panel-headline">
+						<div class="panel-heading">
+							<h3 class="panel-title">数据总览</h3>
+							<p class="panel-subtitle">Period: Sep 14, 2017 - Now</p>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-md-3">
+									<div class="metric">
+										<span class="icon"><i class="fa fa-bar-chart"></i></span>
+										<p>
+											<span class="number" id="measure-num">602</span>
+											<span class="title">测量总次数</span>
+										</p>
+									</div>
 								</div>
-								<div class="intop-2" style="width:50%;height:100%;float:left">
-									<button type="button" class="btn btn-success btn-toastr" data-context="success" data-message="This is success info" data-position="top-right" style="margin-left: 35%;">总监测用户数</button>
-									<h1 id="mac-num" style="align:center;text-align:center;font-family:Microsoft YaHei;font-size: 60px;">0</h1>
+								<div class="col-md-3">
+									<div class="metric">
+										<span class="icon"><i class="lnr lnr-user"></i></span>
+										<p>
+											<span class="number" id="mac-num">203</span>
+											<span class="title">总检测用户数</span>
+										</p>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="metric">
+										<span class="icon"><i class="fa fa-eye"></i></span>
+										<p>
+											<span class="number" id="play-num">332</span>
+											<span class="title">视频播放次数</span>
+										</p>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="metric">
+										<span class="icon"><i class="fa fa-line-chart"></i></span>
+										<p>
+											<span class="number" id="play-time">43s</span>
+											<span class="title">平均播放时长</span>
+										</p>
+									</div>
 								</div>
 							</div>
-							<div id="lib-container" style="width:100%;height: 20px;float:left;"></div>
-							<div id="main-container" style="width:100%;height: 400px;float:left"></div>
-							<div id="area-container" style="width:100%;height: 500px;float:left"></div>
+
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<!-- RECENT PURCHASES -->
+							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">用户主观MoS值分布</h3>
+									<div class="right">
+										<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+										<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+									</div>
+								</div>
+								<div class="panel-body no-padding">
+									<div id="main-container" style="width:100%;height: 100%;"></div>
+								</div>
+							</div>
+							<!-- END RECENT PURCHASES -->
+						</div>
+						<div class="col-md-6">
+							<!-- RECENT PURCHASES -->
+							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">用户客观MoS值分布</h3>
+									<div class="right">
+										<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+										<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+									</div>
+								</div>
+								<div class="panel-body no-padding">
+									<div id="obj-container" style="width:100%;height: 100%;"></div>
+								</div>
+							</div>
+							<!-- END RECENT PURCHASES -->
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<!-- RECENT PURCHASES -->
+							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">不同区域的MoS平均值和方差对比图</h3>
+									<div class="right">
+										<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+										<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+									</div>
+								</div>
+								<div class="panel-body no-padding">
+									<div id="area-container" style="width:100%;height: 100%"></div>
+								</div>
+							</div>
+							<!-- END RECENT PURCHASES -->
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3">
+							<!-- RECENT PURCHASES -->
+							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">区域选择</h3>
+									<div class="right">
+										<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+										<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+									</div>
+								</div>
+								<div class="panel-body no-padding">
+									<div id="select-container" style="width:100%;height: 100%;overflow:hidden;">
+										<select id="buildingSelect" class="form-control input-lg">
+											<option value="cheese">教一</option>
+											<option value="tomatoes">教二</option>
+											<option value="mozarella">教三</option>
+											<option value="mushrooms">教四</option>
+											<option value="cheese">主干道</option>
+											<option value="pepperoni">教三教四间广场</option>
+											<option value="pepperoni">主楼</option>
+											<option value="pepperoni">经管楼</option>
+											<option value="pepperoni">新科研楼</option>
+											<option value="pepperoni">图书馆</option>
+											<option value="pepperoni">篮球场</option>
+											<option value="pepperoni">操场</option>
+											<option value="pepperoni">体育馆</option>
+											<option value="pepperoni">学生餐厅</option>
+											<option value="pepperoni">综合餐厅</option>
+											<option value="pepperoni">科学会堂</option>
+											<option value="pepperoni">音乐喷泉</option>
+											<option value="pepperoni">学生公寓1</option>
+											<option value="pepperoni">学生公寓2</option>
+											<option value="pepperoni">学生公寓3</option>
+											<option value="pepperoni">学生公寓4</option>
+											<option value="pepperoni">学生公寓5</option>
+											<option value="pepperoni">学生公寓6</option>
+											<option value="pepperoni">学生公寓8</option>
+											<option value="pepperoni">学生公寓9</option>
+											<option value="pepperoni">学生公寓10</option>
+											<option value="pepperoni">学生公寓13</option>
+											<option value="pepperoni">学生公寓29</option>
+											<option value="pepperoni">留学生公寓1</option>
+											<option value="pepperoni">学苑超市</option>
+											<option value="pepperoni">综合服务楼</option>
+											<option value="pepperoni">北邮科技大厦</option>
+											<option value="pepperoni">明光楼</option>
+										</select>
+										<div class="profile-header">
+											<div class="profile-main">
+												<img id="buildingImg" src="assets/img/building2.jpg" alt="xx" style="width:100%;height:290px;min-height: 290px;">
+											</div>
+											<div class="profile-stat">
+												<div class="row">
+													<div class="col-md-12 stat-item">
+														<span id="buildingIntroduction">教一</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- END RECENT PURCHASES -->
+						</div>
+						<div class="col-md-9">
+							<!-- RECENT PURCHASES -->
+							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">区域主客观MoS值对比</h3>
+									<div class="right">
+										<button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i></button>
+										<button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
+									</div>
+								</div>
+								<div class="panel-body no-padding">
+									<div id="num-container" style="width:100%;height: 100%;"></div>
+								</div>
+							</div>
+							<!-- END RECENT PURCHASES -->
 						</div>
 					</div>
 				</div>
@@ -180,8 +377,8 @@
                     plotBorderWidth: null,
                     plotShadow: false
                 },
-                title: {
-                    text: '用户主观Mos值占比'
+                title :{
+                    text:null
                 },
                 tooltip: {
                     headerFormat: '{series.name}<br>',
@@ -224,7 +421,7 @@
                 }]
             });
             $.ajax({
-                url:"http://localhost:8080/qoe/api/high/main",
+                url:"http://10.103.93.23:8080/qoe/api/high/main",
                 dataType:"json",
                 type:"GET",
                 success:function(response){
@@ -247,6 +444,83 @@
         });
 
 	</script>
+	<script>
+        $(function () {
+            var chart = new Highcharts.Chart({
+//            $('#main-container').highcharts({
+                chart: {
+                    renderTo : 'obj-container',
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                },
+                title :{
+                    text:null
+                },
+                tooltip: {
+                    headerFormat: '{series.name}<br>',
+                    pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                color:[
+                    '#8B1A1A',
+                    '#DC143C',
+                    '#836FFF',
+                    '#4A708B',
+                    '#43CD80'
+                ],
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            color:'#000000',
+                            connectorColor:'#000000'
+                        }
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    name: '用户打分占比',
+                    data: [
+                        ['1分',10],
+                        ['2分',10],
+                        ['3分',10],
+                        ['4分',10],
+                        {
+                            name: '5分',
+                            y: 60,
+                            sliced: true,
+                            selected: true
+                        }
+                    ]
+                }]
+            });
+            $.ajax({
+                url:"http://10.103.93.23:8080/qoe/api/high/mainobj",
+                dataType:"json",
+                type:"GET",
+                success:function(response){
+                    var data = response.data;
+                    console.info(data.mos1);
+                    var arr = new Array();
+                    var value1 = ['1分', data.mos1]
+                    var value2 = ['2分', data.mos2]
+                    var value3 = ['3分', data.mos3]
+                    var value4 = ['4分', data.mos4]
+                    var value5 = ['5分', data.mos5]
+                    arr.push(value1)
+                    arr.push(value2)
+                    arr.push(value3)
+                    arr.push(value4)
+                    arr.push(value5)
+                    chart.series[0].setData(arr)
+                }
+            });
+        });
+
+	</script>
 
 	<script>
         $(function () {
@@ -257,10 +531,7 @@
                     zoomType: 'xy'
                 },
                 title: {
-                    text: '各个区域的Mos平均值和方差对比图'
-                },
-                subtitle: {
-                    text: 'QoE平台'
+                    text: null
                 },
                 xAxis: [{
                     categories: [],
@@ -298,15 +569,7 @@
                 tooltip: {
                     shared: true
                 },
-                legend: {
-                    layout: 'vertical',
-                    align: 'left',
-                    x: 80,
-                    verticalAlign: 'top',
-                    y: 55,
-                    floating: true,
-                    backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
-                },
+
                 series: [{
                     name: '平均Mos值',
                     type: 'column',
@@ -325,7 +588,7 @@
                 }]
             });
             $.ajax({
-                url:"http://localhost:8080/qoe/api/high/area",
+                url:"http://10.103.93.23:8080/qoe/api/high/area",
                 dataType:"json",
                 type:"GET",
                 success:function(response){
@@ -338,6 +601,110 @@
         });
 
 
+	</script>
+	<script>
+        $(function () {
+            // Set up the chart
+            td_chart = new Highcharts.Chart({
+//        $('#container').highcharts({
+                chart: {
+                    renderTo: 'num-container',
+                    type: 'spline'
+                },
+                title: {
+                    text: null
+                },
+                xAxis: {
+                    title:'测量次序',
+                    categories: [],
+                },
+                yAxis: {
+                    title: {
+                        text: 'Mos值（1~5）'
+                    },
+                    min: 0,
+                    minorGridLineWidth: 0,
+                    gridLineWidth: 0,
+                    alternateGridColor: null,
+                    plotBands: [{ // Light air
+                        from: 0.5,
+                        to: 1.5,
+                        color: 'rgba(64, 224, 205, 0.1)',
+                        label: {
+                            text: '',
+                            style: {
+                                color: '#606060'
+                            }
+                        }
+                    }, { // Light breeze
+                        from: 1.5,
+                        to: 2.5,
+                        color: 'rgba(24, 139, 34, 0.1)',
+                        label: {
+                            text: '',
+                            style: {
+                                color: '#606060'
+                            }
+                        }
+                    }, { // Gentle breeze
+                        from: 2.5,
+                        to: 3.5,
+                        color: 'rgba(255, 215, 0, 0.1)',
+                        label: {
+                            text: '',
+                            style: {
+                                color: '#606060'
+                            }
+                        }
+                    }, { // Moderate breeze
+                        from: 3.5,
+                        to: 4.5,
+                        color: 'rgba(255, 128, 0, 0.1)',
+                        label: {
+                            text: '',
+                            style: {
+                                color: '#606060'
+                            }
+                        }
+                    }, { // Fresh breeze
+                        from: 4.5,
+                        to: 5,
+                        color: 'rgba(255, 0, 0, 0.1)',
+                        label: {
+                            text: '',
+                            style: {
+                                color: '#606060'
+                            }
+                        }
+                    }]
+                },
+                plotOptions: {
+                    spline: {
+                        dataLabels: {
+                            enabled: true          // 开启数据标签
+                        }
+                    }
+                },
+                series: [{
+                    name: '主观Mos值',
+                    data: [],
+                }, {
+                    name: '客观Mos值',
+                    data: [],
+                }]
+            });
+            $.ajax({
+                url:"http://10.103.93.23:8080/qoe/api/high/osCompare",
+                dataType:"json",
+                type:"GET",
+                success:function(response){
+                    var data = response.data;
+                    td_chart.xAxis.categories = data[0]
+                    td_chart.series[0].setData(data[1])
+                    td_chart.series[1].setData(data[2])
+                }
+            });
+        });
 	</script>
 </body>
 

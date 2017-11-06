@@ -8,8 +8,27 @@ public class HotMapModel {
     private Double lng;
     private Double lat;
     private Integer count;
+    private String buildingName;
+    private Integer buildingNo;
 
-    public String getMark() {
+    
+	public String getBuildingName() {
+		return buildingName;
+	}
+
+	public void setBuildingName(String buildingName) {
+		this.buildingName = buildingName;
+	}
+
+	public Integer getBuildingNo() {
+		return buildingNo;
+	}
+
+	public void setBuildingNo(Integer buildingNo) {
+		this.buildingNo = buildingNo;
+	}
+
+	public String getMark() {
         return mark;
     }
 
