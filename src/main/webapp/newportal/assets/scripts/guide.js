@@ -97,17 +97,16 @@ $(function() {
 	  backdropContainer: 'body',
 	  backdropPadding: 0,
 	  basePath: "/qoe/newportal",
-	  template: "<div class='popover tour'> "+
-		"<div class='arrow'></div>"+
-		"<h3 class='popover-title'></h3>"+
-		"<div class='popover-content'></div>"+
-		"<div class='popover-navigation'>"+
-			"<button class='btn btn-default' data-role='prev'>« Prev</button>"+
-			"<span data-role='separator'>|</span>"+
-			"<button class='btn btn-default' data-role='next'>Next »</button>"+
-		"</div>"+
-	   " <button class='btn btn-default' data-role='end'>End tour</button>"+
-	  "</div>"
+	  template:  '<div class="popover" role="tooltip"> <div class="arrow"></div> '+
+		 	'<h3 class="popover-title"></h3> '+
+		 	'<div class="popover-content"></div>'+
+		 	'<div class="popover-navigation"> '+
+		 	'<div class="btn-group"> '+
+		 	'<button class="btn btn-sm btn-default" data-role="prev">&laquo; Prev</button> '+
+		 	'<button class="btn btn-sm btn-default" data-role="next">Next &raquo;</button> '+
+		 	'</div> '+
+		 	'<button class="btn btn-sm btn-default" data-role="end">End tour</button> '+
+		 	'</div> </div>'
 	  });
 	// Initialize the tour
 	console.log(" Initialize the tour");

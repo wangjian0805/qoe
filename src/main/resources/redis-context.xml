@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="  
+      http://www.springframework.org/schema/beans  
+      http://www.springframework.org/schema/beans/spring-beans-4.3.xsd  
+      http://www.springframework.org/schema/tx  
+      http://www.springframework.org/schema/tx/spring-tx-4.3.xsd  
+      http://www.springframework.org/schema/context  
+      http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- scanner redis properties -->
+	<context:property-placeholder location="classpath:redis.properties" ignore-unresolvable="true" />
+
+	<!--（1）如果你有多个数据源需要通过<context:property-placeholder管理，且不愿意放在一个配置文件里，那么一定要加上ignore-unresolvable=“true" -->
+	<!--（2）注意新版的（具体从哪个版本开始不清楚，有兴趣可以查一下）JedisPoolConfig的property name，不是maxActive而是maxTotal，而且没有maxWait属性，建议看一下Jedis源码。 -->
+	<!-- redis config start -->
+	<!-- 配置JedisPoolConfig实例 -->
+	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxIdle" value="${redis.maxIdle}" />
+		<property name="maxTotal" value="${redis.maxTotal}" />
+		<property name="maxWaitMillis" value="${redis.maxWaitMillis}" />
+		<property name="testOnBorrow" value="${redis.testOnBorrow}" />
+	</bean>
+
+	<!-- 配置JedisConnectionFactory -->
+	<bean id="jedisConnectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<property name="hostName" value="${redis.host}" />
+		<property name="port" value="${redis.port}" />
+		<property name="password" value="${redis.password}" />
+		<property name="database" value="${redis.dbIndex}" />
+		<property name="poolConfig" ref="poolConfig" />
+	</bean>
+
+	<!-- 配置RedisTemplate -->
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+		<property name="connectionFactory" ref="jedisConnectionFactory" />
+	</bean>
+
+	<!-- 配置RedisCacheManager -->
+	<bean id="redisCacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
+		<constructor-arg name="redisOperations" ref="redisTemplate" />
+		<property name="defaultExpiration" value="${redis.expiration}" />
+	</bean>
+
+	<!-- 配置RedisCacheConfig -->
+	<bean id="redisCacheConfig" class="cn.bupt.qoe.util.RedisCacheConfig">
+		<constructor-arg ref="jedisConnectionFactory" />
+		<constructor-arg ref="redisTemplate" />
+		<constructor-arg ref="redisCacheManager" />
+	</bean>
+
+
+</beans>  

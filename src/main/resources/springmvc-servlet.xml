@@ -15,7 +15,7 @@
 	<!-- 配置自动扫描组件 -->
 	<context:component-scan base-package="cn.bupt.qoe.service"/>
 	<context:component-scan base-package="cn.bupt.qoe.web" />
-
+	<context:component-scan base-package="cn.bupt.qoe.util" />
 	<context:annotation-config />
 	<mvc:annotation-driven/>
 

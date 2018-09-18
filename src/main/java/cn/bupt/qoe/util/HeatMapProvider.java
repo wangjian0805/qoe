@@ -6,7 +6,7 @@ import cn.bupt.qoe.model.HeatMapOperator;
 
 public class HeatMapProvider {
 
-	private final String TBL_TEST = "newapp_metadata_test";
+	private final String TBL_TEST = "metadata_test";
 	public String selectMapByOperater(HeatMapOperator h) {
         SQL sql = new SQL().SELECT("mark,longitude,latitude,mos_sub").FROM(TBL_TEST);
         Long timeStart = h.getTimeStart();

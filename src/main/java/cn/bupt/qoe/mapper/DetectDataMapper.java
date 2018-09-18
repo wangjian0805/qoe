@@ -27,7 +27,7 @@ public interface DetectDataMapper {
 
 	List<DetectData> selectAllByPage(PageBounds pageBounds);
 
-	@Insert(value = "insert into newapp_metadata_static values (#{id,jdbcType=BIGINT}, "
+	@Insert(value = "insert into metadata_static values (#{id,jdbcType=BIGINT}, "
 			+ "												#{mac,jdbcType=VARCHAR},"
 			+ "                                           	#{cpu,jdbcType=DOUBLE}, "
 			+ "                                           	#{screenPixels,jdbcType=INTEGER}, "
@@ -44,7 +44,7 @@ public interface DetectDataMapper {
 			+ "                                           	#{mark,jdbcType=VARCHAR})")
 	int insertStaticData(StaticData data);
 
-	@Insert(value = "insert into newapp_metadata_monitor values (#{id,jdbcType=BIGINT}, "
+	@Insert(value = "insert into metadata_monitor values (#{id,jdbcType=BIGINT}, "
 			+ "												#{monitorTime,jdbcType=BIGINT},"
 			+ "												#{monitorTimeStamp,jdbcType=BIGINT},"
 			+ "                                           	#{sendSpeed,jdbcType=INTEGER}, "
@@ -55,7 +55,7 @@ public interface DetectDataMapper {
 			+ "                                           	#{mark,jdbcType=VARCHAR})")
 	int insertMonitorData(MonitorData data);
 
-	@Insert(value = "insert into newapp_metadata_test values (#{id,jdbcType=BIGINT}, "
+	@Insert(value = "insert into metadata_test values (#{id,jdbcType=BIGINT}, "
 			+ "												#{mos_sub,jdbcType=DOUBLE},"
 			+ "												#{mos_obj,jdbcType=DOUBLE},"
 			+ "                                           	#{testTime,jdbcType=BIGINT}, "

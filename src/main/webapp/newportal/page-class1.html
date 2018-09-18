@@ -38,12 +38,16 @@
 	<link href="assets/vendor/bootstrap/css/bootstrap-table.css" rel="stylesheet">
 	<link href="assets/css/building.css" rel="stylesheet">
 	<script src="assets/vendor/bootstrap/js/bootstrap-table.js"></script>
-
+		
+	<script type="application/javascript">
+		var ip = "10.103.93.24:8081";
+	</script>
 	<script type="application/javascript">
         $.ajax({
-            url:"http://localhost:8080/qoe/api/high/stastic",
+            url:"http://"+ip+"/qoe/api/high/stastic",
             dataType:"json",
             type:"GET",
+            timeout:15000,
             success:function(response){
                 var data = response.data;
                 document.getElementById("measure-num").innerHTML = data[0]
@@ -80,7 +84,7 @@
                 $("#buildingIntroduction").html(this.options[this.selectedIndex].text);
                 var building = this.options[this.selectedIndex].text
                 $.ajax({
-                    url:"http://localhost:8080/qoe/api/high/osCompareByBuilding?building="+building,
+                    url:"http://"+ip+"/qoe/api/high/osCompareByBuilding?building="+building,
                     dataType:"json",
                     type:"GET",
                     success:function(response){
@@ -97,7 +101,7 @@
             var building = obj.attr("value");
 
             $.ajax({
-                url:"http://localhost:8080/qoe/api/high/osCompareByBuilding?building="+building,
+                url:"http://"+ip+"/qoe/api/high/osCompareByBuilding?building="+building,
                 dataType:"json",
                 type:"GET",
                 success:function(response){
@@ -424,7 +428,7 @@
                 }]
             });
             $.ajax({
-                url:"http://localhost:8080/qoe/api/high/main",
+                url:"http://"+ip+"/qoe/api/high/main",
                 dataType:"json",
                 type:"GET",
                 success:function(response){
@@ -501,7 +505,7 @@
                 }]
             });
             $.ajax({
-                url:"http://localhost:8080/qoe/api/high/mainobj",
+                url:"http://"+ip+"/qoe/api/high/mainobj",
                 dataType:"json",
                 type:"GET",
                 success:function(response){
@@ -591,7 +595,7 @@
                 }]
             });
             $.ajax({
-                url:"http://localhost:8080/qoe/api/high/area",
+                url:"http://"+ip+"/qoe/api/high/area",
                 dataType:"json",
                 type:"GET",
                 success:function(response){
@@ -697,7 +701,7 @@
                 }]
             });
             $.ajax({
-                url:"http://localhost:8080/qoe/api/high/osCompare",
+                url:"http://"+ip+"/qoe/api/high/osCompare",
                 dataType:"json",
                 type:"GET",
                 success:function(response){

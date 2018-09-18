@@ -15,6 +15,7 @@ import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
@@ -39,24 +40,29 @@ public class DetectDataController {
     @Autowired
     DetectDataMapper mapper;
 
-    // 返回json格式的数据
     @RequestMapping("/data")
-    @ResponseBody // 对象变json
+    @ResponseBody 
     public WebResult getAllDetectDataAndMos() {
         WebResult result = new WebResult();
         result.setData(mapper.getAllDetectData());
         return result;
     }
 
+    /**
+     * 根据mark返回
+     * @param mark
+     * @return
+     */
     @RequestMapping("/one")
-    @ResponseBody // 对象变json
+    @ResponseBody 
     public WebResult getOneDetectDataAndMos(String mark) {
         WebResult result = new WebResult();
         result.setData(mapper.getOneDetectDataByMark(mark));
         return result;
     }
 
-    // 安卓测量数据持久化
+    // 安卓测量数据持久化接口
+    @CacheEvict(value = { "heatpoints" }, allEntries = true) 
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     @ResponseBody
     public WebResult insertDetectData(@RequestBody DetectData detectData) {

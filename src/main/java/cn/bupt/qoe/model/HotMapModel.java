@@ -1,9 +1,11 @@
 package cn.bupt.qoe.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Ambitous on 2017/9/21.
  */
-public class HotMapModel {
+public class HotMapModel implements Serializable{
     private String mark;
     private Double lng;
     private Double lat;

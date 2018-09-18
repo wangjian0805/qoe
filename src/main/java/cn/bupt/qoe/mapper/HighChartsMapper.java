@@ -15,25 +15,25 @@ public interface HighChartsMapper {
             @Result(property = "sub", column = "mos_sub"),
             @Result(property = "obj", column = "mos_obj")
     })
-    @Select("select mos_sub,mos_obj from newapp_metadata_test limit 100")
+    @Select("select mos_sub,mos_obj from metadata_test limit 100")
     List<OsCompareModel> getOsCompareData();
 
-    @Select("select count(*) from newapp_metadata_test group by mos_sub order by mos_sub")
+    @Select("select count(*) from metadata_test group by mos_sub order by mos_sub")
     List<Double> getMosData();
 
-    @Select("select count(ROUND(mos_obj)) from newapp_metadata_test group by ROUND(mos_obj) order by ROUND(mos_obj)")
+    @Select("select count(ROUND(mos_obj)) from metadata_test group by ROUND(mos_obj) order by ROUND(mos_obj)")
     List<Double> getObjMosData();
 
-    @Select("select count(*) from newapp_metadata_test")
+    @Select("select count(*) from metadata_test")
     Integer getTestNum();
 
-    @Select("select count(distinct mac) from newapp_metadata_static")
+    @Select("select count(distinct mac) from metadata_static")
     Integer getMacNum();
 
-    @Select("select count(*) from newapp_metadata_static")
+    @Select("select count(*) from metadata_static")
     Integer getPlayNum();
 
-    @Select("select count(*) from newapp_metadata_monitor")
+    @Select("select count(*) from metadata_monitor")
     Integer getMonitorNum();
 
     @Results({
@@ -41,7 +41,7 @@ public interface HighChartsMapper {
             @Result(property = "lat", column = "latitude"),
             @Result(property = "count", column = "mos_sub")
     })
-    @Select("select mark,longitude,latitude,mos_sub from newapp_metadata_test")
+    @Select("select mark,longitude,latitude,mos_sub from metadata_test")
     List<HotMapModel> getHotMapData();
 
     @Select("select * from geo_building_map")

@@ -7,9 +7,13 @@ import cn.bupt.qoe.rest.WebResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -93,14 +97,16 @@ public class HighChartsController {
         result.setData(list);
         return result;
     }
-
+    
+    @Cacheable("heatpoints") 
     @RequestMapping("/map")
     @ResponseBody//对象变json
     public WebResult getOsCompareData(@RequestParam("mosMin")int mosMin,
                                       @RequestParam("mosMax")int mosMax,@RequestParam("timeStart")String timeStart,
                                       @RequestParam("timeStop")String timeStop,@RequestParam("againstHeaviness") boolean againstHeaviness,
-                                      @RequestParam("radius")double radius){
+                                      @RequestParam("radius")double radius) throws IOException{
         System.out.println("进入/map");
+        long tt1 = System.currentTimeMillis();
         System.out.println("解析出参数 -- mosMin:"+mosMin+",mosMax:"+mosMax+",timeStart:"+timeStart+
                 ",timeStop:"+timeStop+",againstHeaviness:"+againstHeaviness+",radius: "+radius);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -140,9 +146,9 @@ public class HighChartsController {
         // 过滤后的hotMapModelList
         List<HotMapModel> filteredHotMapModelList = new ArrayList<HotMapModel>();
         if(againstHeaviness){
-            System.out.println("需要反重叠");
+            //System.out.println("需要反重叠");
             double distance = 0.00013*(radius/25);
-            System.out.println("distance: "+distance);
+            //System.out.println("distance: "+distance);
             //若需要 反重叠
             if (hotMapModelList.size() > 0) {
                 // 将第一个元素保存到filteredHotMapModelList
@@ -204,10 +210,23 @@ public class HighChartsController {
         }else{
             filteredHotMapModelList = hotMapModelList;
             //遍历测量记录，加上位置信息
-
         }
-        System.out.println("(过滤)后,数组长度： "+filteredHotMapModelList.size());
+        //System.out.println("(过滤)后,数组长度： "+filteredHotMapModelList.size());
         result.setData(filteredHotMapModelList);
+        long tt2 = System.currentTimeMillis();
+        //System.out.println(tt2-tt1);
+//        File f = new File("mylog.txt");
+//        System.out.println(f.getAbsolutePath());
+//        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd HH:mm:ss");
+//    	String now = sdf.format(new Date());
+//        if(!f.exists()){
+//        	f.createNewFile();
+//        }
+//    	FileWriter fw = new FileWriter(f,true);
+//    	fw.write(""+(tt2-tt1)+"\t"+now+"\r\n");
+//    	fw.flush();
+//    	fw.close();
+        
         return result;
     }
 

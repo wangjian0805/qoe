@@ -1,3 +1,4 @@
+var ip = "localhost:8080";
 //初始化index
 function initpage(){
 	//阻止表单提交事件
@@ -54,7 +55,7 @@ function showMapData( mosMin, mosMax,timeStart ,timeStop ,againstHeaviness,radiu
     heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":radius,blur:"1","gradient":{0.2:'#0000FF',0.4:'#99FF00',0.6:'#FFFF00',1:'#FF0000'}});
     //0.2:'#3399FF',0.4:'#99FF00',0.6:'#FFFF00',1:'#FF0000'
     map.addOverlay(heatmapOverlay);
-    var getMapDataUrl = "http://localhost:8080/qoe/api/high/map";
+    var getMapDataUrl = "http://"+ip+"/qoe/api/high/map";
     getMapDataUrl = getMapDataUrl+
     	"?mosMin="+mosMin+"&mosMax="+mosMax+"&timeStart="+timeStart+"&timeStop="+timeStop+
     	"&againstHeaviness="+againstHeaviness+"&radius="+radius;

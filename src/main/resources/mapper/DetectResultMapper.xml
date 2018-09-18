@@ -46,17 +46,17 @@
   </resultMap>
 
   <select id="getTest" parameterType="java.lang.String" resultMap="testDataMap">
-    select * from newapp_metadata_test where mark=#{mark}
+    select * from metadata_test where mark=#{mark}
   </select>
   <select id="getMonitor" parameterType="java.lang.String" resultMap="monitorDataMap">
-    select * from newapp_metadata_monitor where mark=#{mark}
+    select * from metadata_monitor where mark=#{mark}
   </select>
   <select id="getOneDetectDataByMark" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select * from newapp_metadata_static where mark=#{mark}
+    select * from metadata_static where mark=#{mark}
  </select>
 
   <select id="getAllDetectData" resultMap="BaseResultMap">
-    select * from newapp_metadata_static
+    select * from metadata_static
   </select>
 
 
